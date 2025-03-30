@@ -42,6 +42,38 @@ export const seoMetaTagSchema = z.object({
   favicon: z.string().optional(),
   score: z.number().min(0).max(100).optional(),
   statusChecks: z.record(z.string(), z.object({
+
+export const seoHistorySchema = z.object({
+  id: z.number(),
+  url: z.string(),
+  score: z.number(),
+  timestamp: z.string(),
+  seoData: seoMetaTagSchema
+});
+
+export const monitoringConfigSchema = z.object({
+  id: z.number(),
+  url: z.string(),
+  frequency: z.enum(['daily', 'weekly', 'monthly']),
+  lastCheck: z.string().optional(),
+  notifyOnScore: z.number().optional()
+});
+
+export const seoTaskSchema = z.object({
+  id: z.number(),
+  url: z.string(),
+  title: z.string(),
+  description: z.string(),
+  priority: z.enum(['low', 'medium', 'high']),
+  status: z.enum(['todo', 'in_progress', 'done']),
+  createdAt: z.string(),
+  updatedAt: z.string()
+});
+
+export type SEOHistory = z.infer<typeof seoHistorySchema>;
+export type MonitoringConfig = z.infer<typeof monitoringConfigSchema>;
+export type SEOTask = z.infer<typeof seoTaskSchema>;
+
     status: z.enum(['good', 'warning', 'error']),
     message: z.string()
   })).optional(),

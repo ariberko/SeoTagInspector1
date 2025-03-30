@@ -39,6 +39,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       return res.status(500).json({ message: 'An unknown error occurred' });
     }
+
+  // History endpoint
+  app.get('/api/history/:url', async (req, res) => {
+    try {
+      const history = await seoAnalyzer.getHistory(req.params.url);
+      res.json(history);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching history' });
+    }
+  });
+
+  // Export endpoint 
+  app.get('/api/export/:url', async (req, res) => {
+    try {
+      const history = await seoAnalyzer.getHistory(req.params.url);
+      const tasks = await seoAnalyzer.getTasks(req.params.url);
+      
+      res.json({
+        history,
+        tasks,
+        generatedAt: new Date().toISOString()
+      });
+    } catch (error) {
+      res.status(500).json({ message: 'Error exporting data' });
+    }
+  });
+
+  // Tasks endpoints
+  app.post('/api/tasks', async (req, res) => {
+    try {
+      await seoAnalyzer.saveSEOTask(req.body);
+      const tasks = await seoAnalyzer.getTasks(req.body.url);
+      res.json(tasks);
+    } catch (error) {
+      res.status(500).json({ message: 'Error saving task' });
+    }
+  });
+
+  app.get('/api/tasks/:url', async (req, res) => {
+    try {
+      const tasks = await seoAnalyzer.getTasks(req.params.url);
+      res.json(tasks);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching tasks' });
+    }
+  });
+
   });
 
   const httpServer = createServer(app);
