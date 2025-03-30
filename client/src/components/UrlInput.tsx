@@ -11,7 +11,7 @@ interface UrlInputProps {
 }
 
 export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) {
-  const [url, setUrl] = useState<string>('');
+  const [url, setUrl] = useState<string>('https://');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +34,7 @@ export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) 
               <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-500 text-transparent bg-clip-text mb-1">
                 SEO Tag Inspector
               </h2>
-              <p className="text-gray-600 text-sm">Analyze and optimize your website's SEO meta tags</p>
+              <p className="text-muted-foreground text-sm">Analyze and optimize your website's SEO meta tags</p>
             </div>
             
             <div className="mt-3 sm:mt-0 hidden sm:flex items-center">
@@ -49,13 +49,13 @@ export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) 
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
             <div className="flex-grow relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Globe className="h-5 w-5 text-gray-400" />
+                <Globe className="h-5 w-5 text-muted-foreground" />
               </div>
               <Input 
                 type="url" 
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                className="pl-10 pr-3 py-6 border-2 bg-white text-gray-800 focus:border-primary transition-colors"
+                className="pl-10 pr-3 py-6 border-2 bg-background text-foreground focus:border-primary transition-colors"
                 placeholder="https://example.com" 
                 required
               />
@@ -88,7 +88,7 @@ export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) 
                 </div>
                 <div>
                   <span className="text-sm font-medium">Analyzing SEO tags for the website...</span>
-                  <p className="text-xs text-gray-500 mt-1">This may take a few seconds depending on the website size</p>
+                  <p className="text-xs text-muted-foreground mt-1">This may take a few seconds depending on the website size</p>
                 </div>
               </div>
             </div>
@@ -107,7 +107,7 @@ export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) 
           )}
           
           {!isLoading && !error && (
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-gray-600">
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-muted-foreground">
               <div className="flex items-center">
                 <div className="h-8 w-8 rounded-full bg-success-light flex items-center justify-center mr-3">
                   <Search className="h-4 w-4 text-success" />
