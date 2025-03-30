@@ -39,13 +39,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       return res.status(500).json({ message: 'An unknown error occurred' });
     }
+  });
 
   // History endpoint
   app.get('/api/history/:url', async (req, res) => {
     try {
-      const history = await seoAnalyzer.getHistory(req.params.url);
+      const url = decodeURIComponent(req.params.url);
+      const history = await seoAnalyzer.getHistory(url);
       res.json(history);
     } catch (error) {
+      console.error('Error fetching history:', error);
       res.status(500).json({ message: 'Error fetching history' });
     }
   });
@@ -53,8 +56,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Export endpoint 
   app.get('/api/export/:url', async (req, res) => {
     try {
-      const history = await seoAnalyzer.getHistory(req.params.url);
-      const tasks = await seoAnalyzer.getTasks(req.params.url);
+      const url = decodeURIComponent(req.params.url);
+      const history = await seoAnalyzer.getHistory(url);
+      const tasks = await seoAnalyzer.getTasks(url);
       
       res.json({
         history,
@@ -62,6 +66,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         generatedAt: new Date().toISOString()
       });
     } catch (error) {
+      console.error('Error exporting data:', error);
       res.status(500).json({ message: 'Error exporting data' });
     }
   });
@@ -73,22 +78,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const tasks = await seoAnalyzer.getTasks(req.body.url);
       res.json(tasks);
     } catch (error) {
+      console.error('Error saving task:', error);
       res.status(500).json({ message: 'Error saving task' });
     }
   });
 
   app.get('/api/tasks/:url', async (req, res) => {
     try {
-      const tasks = await seoAnalyzer.getTasks(req.params.url);
+      const url = decodeURIComponent(req.params.url);
+      const tasks = await seoAnalyzer.getTasks(url);
       res.json(tasks);
     } catch (error) {
+      console.error('Error fetching tasks:', error);
       res.status(500).json({ message: 'Error fetching tasks' });
     }
   });
 
-  });
-
   const httpServer = createServer(app);
-
   return httpServer;
 }

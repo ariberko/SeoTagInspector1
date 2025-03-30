@@ -42,7 +42,21 @@ export const seoMetaTagSchema = z.object({
   favicon: z.string().optional(),
   score: z.number().min(0).max(100).optional(),
   statusChecks: z.record(z.string(), z.object({
+    status: z.enum(['good', 'warning', 'error']),
+    message: z.string()
+  })).optional(),
+  recommendations: z.array(
+    z.object({
+      type: z.enum(['success', 'warning', 'error', 'info']),
+      title: z.string(),
+      description: z.string()
+    })
+  ).optional()
+});
 
+export type SEOMetaTag = z.infer<typeof seoMetaTagSchema>;
+
+// History, Monitoring, and Task schemas
 export const seoHistorySchema = z.object({
   id: z.number(),
   url: z.string(),
@@ -73,17 +87,3 @@ export const seoTaskSchema = z.object({
 export type SEOHistory = z.infer<typeof seoHistorySchema>;
 export type MonitoringConfig = z.infer<typeof monitoringConfigSchema>;
 export type SEOTask = z.infer<typeof seoTaskSchema>;
-
-    status: z.enum(['good', 'warning', 'error']),
-    message: z.string()
-  })).optional(),
-  recommendations: z.array(
-    z.object({
-      type: z.enum(['success', 'warning', 'error', 'info']),
-      title: z.string(),
-      description: z.string()
-    })
-  ).optional()
-});
-
-export type SEOMetaTag = z.infer<typeof seoMetaTagSchema>;

@@ -1,9 +1,13 @@
 import * as cheerio from 'cheerio';
 import fetch from 'node-fetch';
-import { SEOMetaTag } from '@shared/schema';
+import { SEOMetaTag, SEOHistory, MonitoringConfig, SEOTask } from '@shared/schema';
 import { calculateSEOScore, generateRecommendations } from '@/lib/seoUtils';
 
 class SEOAnalyzer {
+  private history: Map<string, SEOHistory[]> = new Map();
+  private monitoringConfigs: Map<string, MonitoringConfig> = new Map();
+  private tasks: Map<string, SEOTask[]> = new Map();
+
   async analyzeSEO(url: string): Promise<SEOMetaTag> {
     try {
       // Ensure URL has protocol
@@ -12,53 +16,6 @@ class SEOAnalyzer {
       }
       
       // Fetch the HTML content
-
-  private history: Map<string, SEOHistory[]> = new Map();
-  private monitoringConfigs: Map<string, MonitoringConfig> = new Map();
-  private tasks: Map<string, SEOTask[]> = new Map();
-
-  async saveHistory(url: string, seoData: SEOMetaTag) {
-    if (!this.history.has(url)) {
-      this.history.set(url, []);
-    }
-    
-    const history = this.history.get(url)!;
-    history.push({
-      id: Date.now(),
-      url,
-      score: seoData.score || 0,
-      timestamp: new Date().toISOString(),
-      seoData
-    });
-  }
-
-  async getHistory(url: string): Promise<SEOHistory[]> {
-    return this.history.get(url) || [];
-  }
-
-  async setMonitoring(config: MonitoringConfig) {
-    this.monitoringConfigs.set(config.url, config);
-  }
-
-  async saveSEOTask(task: Omit<SEOTask, 'id' | 'createdAt' | 'updatedAt'>) {
-    if (!this.tasks.has(task.url)) {
-      this.tasks.set(task.url, []);
-    }
-
-    const tasks = this.tasks.get(task.url)!;
-    const newTask: SEOTask = {
-      ...task,
-      id: Date.now(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    tasks.push(newTask);
-  }
-
-  async getTasks(url: string): Promise<SEOTask[]> {
-    return this.tasks.get(url) || [];
-  }
-
       const response = await fetch(url, {
         headers: {
           'User-Agent': 'Mozilla/5.0 (compatible; SEOAnalyzerBot/1.0; +http://seotaginspector.com)'
@@ -165,6 +122,48 @@ class SEOAnalyzer {
       console.error('Error analyzing SEO:', error);
       throw error;
     }
+  }
+
+  async saveHistory(url: string, seoData: SEOMetaTag) {
+    if (!this.history.has(url)) {
+      this.history.set(url, []);
+    }
+    
+    const history = this.history.get(url)!;
+    history.push({
+      id: Date.now(),
+      url,
+      score: seoData.score || 0,
+      timestamp: new Date().toISOString(),
+      seoData
+    });
+  }
+
+  async getHistory(url: string): Promise<SEOHistory[]> {
+    return this.history.get(url) || [];
+  }
+
+  async setMonitoring(config: MonitoringConfig) {
+    this.monitoringConfigs.set(config.url, config);
+  }
+
+  async saveSEOTask(task: Omit<SEOTask, 'id' | 'createdAt' | 'updatedAt'>) {
+    if (!this.tasks.has(task.url)) {
+      this.tasks.set(task.url, []);
+    }
+
+    const tasks = this.tasks.get(task.url)!;
+    const newTask: SEOTask = {
+      ...task,
+      id: Date.now(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    tasks.push(newTask);
+  }
+
+  async getTasks(url: string): Promise<SEOTask[]> {
+    return this.tasks.get(url) || [];
   }
   
   private extractFavicon($: cheerio.CheerioAPI, baseUrl: string): string {
