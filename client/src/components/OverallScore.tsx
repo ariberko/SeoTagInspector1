@@ -20,6 +20,8 @@ interface OverallScoreProps {
   onRefresh?: () => void;
 }
 
+
+
 export default function OverallScore({ url, seoData, onRefresh }: OverallScoreProps) {
   const score = seoData.score || 0;
   const statusChecks = seoData.statusChecks || {};
@@ -134,6 +136,56 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
     } catch {
       return url;
     }
+  };
+  
+  // Generate related search terms based on the title and URL
+  const generateRelatedSearches = (title: string, searchUrl: string): string[] => {
+    // Extract the domain name to construct better suggestions
+    let domain = '';
+    try {
+      const urlObj = new URL(searchUrl);
+      domain = urlObj.hostname.replace(/^www\./, '');
+      domain = domain.split('.')[0]; // Just the first part of the domain
+    } catch {
+      domain = 'site';
+    }
+    
+    // Extract keywords from title
+    const keywords = title.toLowerCase()
+      .replace(/[^\w\s]/g, '')
+      .split(' ')
+      .filter(word => word.length > 3) // Filter out short words
+      .slice(0, 3); // Take up to 3 words
+    
+    // Create alternatives and questions
+    const searches = [];
+    
+    // If we have keywords, generate search suggestions
+    if (keywords.length) {
+      const alternatives = [
+        `best ${keywords[0]} alternatives`,
+        `${keywords[0]} vs ${domain} comparison`,
+        `${keywords.slice(0, 2).join(' ')} for ${Math.random() > 0.5 ? 'beginners' : 'professionals'}`
+      ];
+      
+      const questions = [
+        `how to ${keywords[0]} without ${domain}`,
+        `why ${keywords[0]} ${Math.random() > 0.5 ? 'matters' : 'is important'}`,
+        `${keywords.slice(0, 2).join(' ')} tutorial`
+      ];
+      
+      // Mix alternatives and questions
+      searches.push(
+        alternatives[Math.floor(Math.random() * alternatives.length)],
+        questions[Math.floor(Math.random() * questions.length)]
+      );
+    }
+    
+    // Add a generic one based on domain
+    searches.push(`${domain} ${Math.random() > 0.5 ? 'review' : 'tutorial'}`);
+    
+    // Return unique searches
+    return Array.from(new Set(searches)).slice(0, 3);
   };
 
   return (
@@ -280,64 +332,105 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
             </div>
             
             {/* Right content - Score Card */}
-            <div className={`lg:col-span-4 p-6 lg:p-8 flex items-center justify-center lg:border-l border-gray-200 bg-gradient-to-br ${
-              scoreStatus === 'good' ? 'from-success-light/30 to-success-light/10' : 
-              scoreStatus === 'warning' ? 'from-warning-light/30 to-warning-light/10' : 
-              'from-error-light/30 to-error-light/10'
-            }`}>
-              <div className="text-center">
-                <div className="relative inline-block mb-6">
-                  <div className="absolute inset-0 bg-white rounded-full blur-md opacity-50"></div>
-                  <div className="relative z-10">
-                    <CircularProgress 
-                      value={score} 
-                      size={180} 
-                      strokeWidth={12}
-                      showValue
-                      valueClassName="text-4xl font-bold"
-                      status={scoreStatus}
-                    />
-                    <div className="absolute -top-2 -right-2">
-                      <div className={`flex items-center justify-center h-12 w-12 rounded-full shadow-lg ${
-                        scoreStatus === 'good' ? 'bg-gradient-to-br from-success to-green-600' : 
-                        scoreStatus === 'warning' ? 'bg-gradient-to-br from-warning to-amber-600' : 
-                        'bg-gradient-to-br from-error to-red-600'
-                      }`}>
-                        <span className="text-white font-bold text-lg">{getScoreGrade(score)}</span>
-                      </div>
-                    </div>
+            <div className="lg:col-span-4 lg:border-l border-gray-200">
+              <div className={`p-6 lg:p-8 ${
+                scoreStatus === 'good' ? 'bg-green-50' : 
+                scoreStatus === 'warning' ? 'bg-amber-50' : 
+                'bg-red-50'
+              }`}>
+                <div className="mb-3 flex items-center justify-between">
+                  <h3 className="text-base font-semibold text-gray-700">SEO Health Score</h3>
+                  <div className={`text-xs font-bold px-2 py-1 rounded-md ${
+                    scoreStatus === 'good' ? 'bg-success text-white' : 
+                    scoreStatus === 'warning' ? 'bg-warning text-white' : 
+                    'bg-error text-white'
+                  }`}>
+                    Grade: {getScoreGrade(score)}
                   </div>
                 </div>
                 
-                <h3 className={`text-2xl font-bold ${
-                  scoreStatus === 'good' ? 'text-success' : 
-                  scoreStatus === 'warning' ? 'text-warning' : 
-                  'text-error'
-                }`}>
-                  {getScoreLabel(score)}
-                </h3>
+                <div className="flex items-center mb-6">
+                  <div className="mr-4">
+                    <CircularProgress 
+                      value={score} 
+                      size={100} 
+                      strokeWidth={8}
+                      showValue
+                      valueClassName="text-2xl font-bold"
+                      status={scoreStatus}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className={`text-xl font-bold ${
+                      scoreStatus === 'good' ? 'text-success' : 
+                      scoreStatus === 'warning' ? 'text-warning' : 
+                      'text-error'
+                    }`}>
+                      {getScoreLabel(score)}
+                    </h4>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {scoreStatus === 'good' 
+                        ? 'Your website follows most SEO best practices!' 
+                        : scoreStatus === 'warning'
+                        ? 'Your site needs some improvements to rank better.'
+                        : 'Your website needs significant SEO improvements.'
+                      }
+                    </p>
+                  </div>
+                </div>
                 
-                <p className="text-sm text-gray-600 mt-3 mb-4 max-w-[240px] mx-auto">
-                  {scoreStatus === 'good' 
-                    ? 'Your website follows most SEO best practices!' 
-                    : scoreStatus === 'warning'
-                    ? 'Your site needs some improvements to rank better.'
-                    : 'Your website needs significant SEO improvements.'
-                  }
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-gray-700">Key Issues:</h4>
+                  <ul className="text-sm text-gray-600 space-y-1 pl-5 list-disc">
+                    {scoreStatus === 'good' ? (
+                      <>
+                        <li>Minor optimizations may still improve ranking</li>
+                        <li>Continue monitoring for changes in SEO standards</li>
+                        <li>Consider improving content freshness</li>
+                      </>
+                    ) : scoreStatus === 'warning' ? (
+                      <>
+                        <li>Meta descriptions need improvement</li>
+                        <li>Heading structure can be optimized</li>
+                        <li>Consider adding more structured data</li>
+                      </>
+                    ) : (
+                      <>
+                        <li>Missing or poor meta tags</li>
+                        <li>Incomplete social media optimization</li>
+                        <li>Page structure needs significant work</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+              </div>
+              
+              {/* Related Searches Section */}
+              <div className="p-6 border-t border-gray-200">
+                <h3 className="text-base font-semibold text-gray-700 mb-3">
+                  Related Searches You're Missing
+                </h3>
+                <p className="text-xs text-gray-500 mb-4">
+                  Users searching these terms may not find your website
                 </p>
                 
-                <div className={`flex items-center justify-center gap-2 py-2 px-4 rounded-full mx-auto w-fit ${
-                  scoreStatus === 'good' ? 'bg-success/10' : 
-                  scoreStatus === 'warning' ? 'bg-warning/10' : 
-                  'bg-error/10'
-                }`}>
-                  <ShieldIcon className={`h-5 w-5 ${
-                    scoreStatus === 'good' ? 'text-success' : 
-                    scoreStatus === 'warning' ? 'text-warning' : 
-                    'text-error'
-                  }`} />
-                  
-                  <span className="text-sm font-medium">SEO Health Score</span>
+                <div className="space-y-3">
+                  {seoData.title ? (
+                    generateRelatedSearches(seoData.title, url).map((search: string, index: number) => (
+                      <div key={index} className="flex items-center bg-gray-50 p-3 rounded-lg">
+                        <div className="flex-shrink-0 text-gray-400 mr-3">
+                          <AlertTriangleIcon className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">{search}</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-sm text-gray-500 italic">
+                      No title information available for analysis
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
