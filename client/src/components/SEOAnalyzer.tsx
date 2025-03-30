@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import UrlInput from './UrlInput';
 import OverallScore from './OverallScore';
 import PreviewSection from './PreviewSection';
@@ -6,7 +6,9 @@ import DetailedAnalysis from './DetailedAnalysis';
 import Recommendations from './Recommendations';
 import SummaryStats from './SummaryStats';
 import CompetitorAnalysis from './CompetitorAnalysis';
+import SearchHistory from './SearchHistory';
 import { useSEOAnalysis } from '@/hooks/useSEOAnalysis';
+import { useSearchHistory } from '@/context/SearchHistoryContext';
 import { SEOMetaTag } from '@shared/schema';
 
 export default function SEOAnalyzer() {
@@ -17,6 +19,14 @@ export default function SEOAnalyzer() {
     isLoading, 
     error 
   } = useSEOAnalysis();
+  const { addToHistory } = useSearchHistory();
+
+  // Add to search history when SEO data is available
+  useEffect(() => {
+    if (seoData && url) {
+      addToHistory(url, seoData);
+    }
+  }, [seoData, url, addToHistory]);
 
   const handleUrlSubmit = async (submittedUrl: string) => {
     setUrl(submittedUrl);
@@ -36,6 +46,8 @@ export default function SEOAnalyzer() {
         isLoading={isLoading} 
         error={error} 
       />
+      
+      <SearchHistory onSelectUrl={handleUrlSubmit} />
 
       {seoData && (
         <div className="space-y-8">
