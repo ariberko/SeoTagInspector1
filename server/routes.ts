@@ -41,59 +41,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // History endpoint
-  app.get('/api/history/:url', async (req, res) => {
-    try {
-      const url = decodeURIComponent(req.params.url);
-      const history = await seoAnalyzer.getHistory(url);
-      res.json(history);
-    } catch (error) {
-      console.error('Error fetching history:', error);
-      res.status(500).json({ message: 'Error fetching history' });
-    }
-  });
-
-  // Export endpoint 
-  app.get('/api/export/:url', async (req, res) => {
-    try {
-      const url = decodeURIComponent(req.params.url);
-      const history = await seoAnalyzer.getHistory(url);
-      const tasks = await seoAnalyzer.getTasks(url);
-      
-      res.json({
-        history,
-        tasks,
-        generatedAt: new Date().toISOString()
-      });
-    } catch (error) {
-      console.error('Error exporting data:', error);
-      res.status(500).json({ message: 'Error exporting data' });
-    }
-  });
-
-  // Tasks endpoints
-  app.post('/api/tasks', async (req, res) => {
-    try {
-      await seoAnalyzer.saveSEOTask(req.body);
-      const tasks = await seoAnalyzer.getTasks(req.body.url);
-      res.json(tasks);
-    } catch (error) {
-      console.error('Error saving task:', error);
-      res.status(500).json({ message: 'Error saving task' });
-    }
-  });
-
-  app.get('/api/tasks/:url', async (req, res) => {
-    try {
-      const url = decodeURIComponent(req.params.url);
-      const tasks = await seoAnalyzer.getTasks(url);
-      res.json(tasks);
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
-      res.status(500).json({ message: 'Error fetching tasks' });
-    }
-  });
-
   const httpServer = createServer(app);
+
   return httpServer;
 }
