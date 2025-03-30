@@ -17,7 +17,6 @@ import {
 } from 'lucide-react';
 import { SEOTooltip } from './ui/seo-tooltip';
 import React from 'react'
-import { Search as SearchIcon } from 'lucide-react'
 
 
 interface OverallScoreProps {
