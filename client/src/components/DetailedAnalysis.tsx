@@ -46,7 +46,7 @@ export default function DetailedAnalysis({ seoData }: DetailedAnalysisProps) {
   return (
     <section>
       <Card className="overflow-hidden shadow-sm">
-        <div className="px-6 py-4 border-b border-border">
+        <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="font-medium text-lg">Detailed Tag Analysis</h3>
         </div>
         
@@ -69,7 +69,7 @@ export default function DetailedAnalysis({ seoData }: DetailedAnalysisProps) {
               <p className="mt-2 text-sm break-words">{seoData.title || 'No title found'}</p>
               <div className="mt-3">
                 <ProgressBar percentage={titlePercentage} status={titleStatus} />
-                <div className="mt-1 flex justify-between text-xs text-muted-foreground">
+                <div className="mt-1 flex justify-between text-xs text-gray-500">
                   <span>{titleLength} characters</span>
                   <span>Recommended: 50-60</span>
                 </div>
@@ -93,7 +93,7 @@ export default function DetailedAnalysis({ seoData }: DetailedAnalysisProps) {
               <p className="mt-2 text-sm break-words">{seoData.description ? seoData.description.substring(0, 120) + (seoData.description.length > 120 ? '...' : '') : 'No description found'}</p>
               <div className="mt-3">
                 <ProgressBar percentage={descriptionPercentage} status={descriptionStatus} />
-                <div className="mt-1 flex justify-between text-xs text-muted-foreground">
+                <div className="mt-1 flex justify-between text-xs text-gray-500">
                   <span>{descriptionLength} characters</span>
                   <span>Recommended: 150-160</span>
                 </div>
@@ -116,16 +116,16 @@ export default function DetailedAnalysis({ seoData }: DetailedAnalysisProps) {
               </div>
               <div className="mt-3 grid grid-cols-3 gap-2">
                 <div className={`p-3 rounded text-center ${getStatusColors(h1Count === 1 ? 'good' : h1Count === 0 ? 'error' : 'warning')}`}>
-                  <div className="font-bold text-xl text-black">{h1Count}</div>
+                  <div className="font-bold text-xl">{h1Count}</div>
                   <div className="text-xs font-medium mt-1">H1 Tags</div>
                 </div>
-                <div className="p-3 rounded bg-gray-100 dark:bg-gray-800 text-center">
-                  <div className="font-bold text-xl text-black">{h2Count}</div>
-                  <div className="text-xs font-medium text-gray-600 dark:text-gray-300 mt-1">H2 Tags</div>
+                <div className="p-3 rounded bg-gray-100 text-center">
+                  <div className="font-bold text-xl">{h2Count}</div>
+                  <div className="text-xs font-medium text-gray-600 mt-1">H2 Tags</div>
                 </div>
-                <div className="p-3 rounded bg-gray-100 dark:bg-gray-800 text-center">
-                  <div className="font-bold text-xl text-black">{h3Count}</div>
-                  <div className="text-xs font-medium text-gray-600 dark:text-gray-300 mt-1">H3 Tags</div>
+                <div className="p-3 rounded bg-gray-100 text-center">
+                  <div className="font-bold text-xl">{h3Count}</div>
+                  <div className="text-xs font-medium text-gray-600 mt-1">H3 Tags</div>
                 </div>
               </div>
             </div>

@@ -16,14 +16,10 @@ export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Add http:// if not present 
+    // Add https:// if not present
     let formattedUrl = url.trim();
-    if (formattedUrl) {
-      // Check for protocol prefix
-      if (!formattedUrl.match(/^[a-zA-Z]+:\/\//)) {
-        // If no protocol is specified, add http://
-        formattedUrl = `http://${formattedUrl}`;
-      }
+    if (formattedUrl && !formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+      formattedUrl = `https://${formattedUrl}`;
     }
     
     onSubmit(formattedUrl);
@@ -38,7 +34,7 @@ export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) 
               <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-500 text-transparent bg-clip-text mb-1">
                 SEO Tag Inspector
               </h2>
-              <p className="text-muted-foreground text-sm">Analyze and optimize your website's SEO meta tags</p>
+              <p className="text-gray-600 text-sm">Analyze and optimize your website's SEO meta tags</p>
             </div>
             
             <div className="mt-3 sm:mt-0 hidden sm:flex items-center">
@@ -53,14 +49,14 @@ export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) 
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
             <div className="flex-grow relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Globe className="h-5 w-5 text-muted-foreground" />
+                <Globe className="h-5 w-5 text-gray-400" />
               </div>
               <Input 
-                type="text" 
+                type="url" 
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                className="pl-10 pr-3 py-6 border-2 bg-background text-foreground focus:border-primary transition-colors"
-                placeholder="example.com or https://example.com" 
+                className="pl-10 pr-3 py-6 border-2 bg-white text-gray-800 focus:border-primary transition-colors"
+                placeholder="https://example.com" 
                 required
               />
             </div>
@@ -92,7 +88,7 @@ export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) 
                 </div>
                 <div>
                   <span className="text-sm font-medium">Analyzing SEO tags for the website...</span>
-                  <p className="text-xs text-muted-foreground mt-1">This may take a few seconds depending on the website size</p>
+                  <p className="text-xs text-gray-500 mt-1">This may take a few seconds depending on the website size</p>
                 </div>
               </div>
             </div>
@@ -111,7 +107,7 @@ export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) 
           )}
           
           {!isLoading && !error && (
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-muted-foreground">
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-gray-600">
               <div className="flex items-center">
                 <div className="h-8 w-8 rounded-full bg-success-light flex items-center justify-center mr-3">
                   <Search className="h-4 w-4 text-success" />

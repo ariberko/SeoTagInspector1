@@ -17,7 +17,7 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
   return (
     <section>
       <Card className="overflow-hidden shadow-sm">
-        <div className="px-6 py-4 border-b border-border flex items-center">
+        <div className="px-6 py-4 border-b border-gray-200 flex items-center">
           <EyeIcon className="h-5 w-5 text-primary mr-2" />
           <div className="flex items-center">
             <h3 className="font-medium text-lg">Preview Appearance</h3>
@@ -28,13 +28,13 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
             </div>
           </div>
           <div className="ml-auto flex items-center">
-            <MonitorSmartphone className="h-4 w-4 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground ml-1">Cross-platform previews</span>
+            <MonitorSmartphone className="h-4 w-4 text-gray-400" />
+            <span className="text-xs text-gray-500 ml-1">Cross-platform previews</span>
           </div>
         </div>
         
         <Tabs defaultValue="google" className="w-full">
-          <div className="border-b border-border px-3 pt-2 bg-accent/30">
+          <div className="border-b border-gray-200 px-3 pt-2 bg-gray-50">
             <TabsList className="grid grid-cols-4 sm:max-w-2xl h-auto bg-transparent p-0 rounded-none">
               <TabsTrigger 
                 value="google"
@@ -84,8 +84,8 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
           
           <CardContent className="p-6 sm:p-8">
             <TabsContent value="google" className="mt-0">
-              <div className="bg-muted p-4 rounded-lg mb-4">
-                <p className="text-sm text-foreground">
+              <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                <p className="text-sm text-gray-600">
                   Google search results preview shows how your page appears in search engine results pages. This affects your click-through rate.
                 </p>
               </div>
@@ -93,8 +93,8 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
             </TabsContent>
             
             <TabsContent value="facebook" className="mt-0">
-              <div className="bg-blue-950/10 dark:bg-blue-900/20 p-4 rounded-lg mb-4">
-                <p className="text-sm text-blue-700 dark:text-blue-400">
+              <div className="bg-blue-50 p-4 rounded-lg mb-4">
+                <p className="text-sm text-blue-700">
                   Facebook uses Open Graph tags to determine how your content appears when shared on the platform. Complete OG tags improve engagement.
                 </p>
               </div>
@@ -102,8 +102,8 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
             </TabsContent>
             
             <TabsContent value="twitter" className="mt-0">
-              <div className="bg-sky-950/10 dark:bg-sky-900/20 p-4 rounded-lg mb-4">
-                <p className="text-sm text-sky-700 dark:text-sky-400">
+              <div className="bg-sky-50 p-4 rounded-lg mb-4">
+                <p className="text-sm text-sky-700">
                   Twitter Card tags control how your content is displayed when shared on Twitter. Well-configured cards improve visibility and engagement.
                 </p>
               </div>
@@ -111,8 +111,8 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
             </TabsContent>
             
             <TabsContent value="instagram" className="mt-0">
-              <div className="bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-red-500/20 dark:from-purple-500/30 dark:via-pink-500/30 dark:to-red-500/30 p-4 rounded-lg mb-4">
-                <p className="text-sm text-purple-900 dark:text-purple-300">
+              <div className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-opacity-10 p-4 rounded-lg mb-4">
+                <p className="text-sm text-purple-900">
                   Instagram uses Open Graph tags for image shares. A properly configured og:image tag ensures your content looks great when shared.
                 </p>
               </div>
@@ -121,7 +121,7 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
           </CardContent>
         </Tabs>
         
-        <div className="px-6 py-3 bg-accent/30 border-t border-border text-xs text-muted-foreground">
+        <div className="px-6 py-3 bg-gray-50 border-t border-gray-200 text-xs text-gray-500">
           Previews are approximate and may vary slightly from actual appearance on platforms.
         </div>
       </Card>
