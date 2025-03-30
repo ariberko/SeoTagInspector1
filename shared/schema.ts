@@ -17,6 +17,15 @@ export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 
 // SEO Analysis related schemas
+export const competitorSchema = z.object({
+  url: z.string().url(),
+  title: z.string(),
+  score: z.number().min(0).max(100),
+  strengths: z.array(z.string())
+});
+
+export type Competitor = z.infer<typeof competitorSchema>;
+
 export const seoMetaTagSchema = z.object({
   url: z.string().url(),
   title: z.string().optional(),
@@ -41,6 +50,9 @@ export const seoMetaTagSchema = z.object({
   language: z.string().optional(),
   favicon: z.string().optional(),
   score: z.number().min(0).max(100).optional(),
+  grade: z.string().optional(),
+  contentLength: z.number().optional(),
+  competitors: z.array(competitorSchema).optional(),
   statusChecks: z.record(z.string(), z.object({
     status: z.enum(['good', 'warning', 'error']),
     message: z.string()

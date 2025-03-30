@@ -18,6 +18,27 @@ export const calculateDescriptionStatus = (length: number): 'good' | 'warning' |
   return 'error';
 };
 
+export const calculateGrade = (score: number): string => {
+  if (score >= 90) return 'A';
+  if (score >= 80) return 'B';
+  if (score >= 70) return 'C';
+  if (score >= 60) return 'D';
+  if (score >= 50) return 'E';
+  return 'F';
+};
+
+export const getGradeColor = (grade: string): string => {
+  switch (grade) {
+    case 'A': return '#4ade80'; // green-400
+    case 'B': return '#22c55e'; // green-500
+    case 'C': return '#facc15'; // yellow-400
+    case 'D': return '#fb923c'; // orange-400
+    case 'E': return '#f97316'; // orange-500
+    case 'F': return '#ef4444'; // red-500
+    default: return '#ef4444';  // red-500
+  }
+};
+
 export const calculateSEOScore = (seoData: any): number => {
   // Start with a perfect score and deduct points for issues
   let score = 100;
@@ -79,6 +100,17 @@ export const calculateSEOScore = (seoData: any): number => {
   
   if (!seoData.twitterCard || !seoData.twitterTitle) {
     score -= 10;
+  }
+  
+  // Calculate content length if it exists
+  if (seoData.contentLength) {
+    if (seoData.contentLength < 300) {
+      score -= 10; // Very thin content
+    } else if (seoData.contentLength < 600) {
+      score -= 5; // A bit thin
+    } else if (seoData.contentLength > 1500) {
+      score += 5; // Substantial content
+    }
   }
   
   // Ensure score is between 0 and 100

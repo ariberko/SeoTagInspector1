@@ -1,16 +1,9 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { SEOMetaTag } from '@shared/schema';
+import { SEOMetaTag, Competitor } from '@shared/schema';
 import { BarChart, ExternalLink, TrendingUp, Award, CheckCircle2 } from 'lucide-react';
 import { ScoreBadge } from './ui/score-badge';
 import { SEOTooltip } from './ui/seo-tooltip';
 import { useState } from 'react';
-
-interface Competitor {
-  url: string;
-  title: string;
-  score: number;
-  strengths: string[];
-}
 
 interface CompetitorAnalysisProps {
   url: string;
