@@ -12,8 +12,10 @@ import {
   ExternalLinkIcon,
   BadgeCheckIcon,
   ShieldIcon,
-  SearchIcon
+  SearchIcon,
+  HelpCircleIcon
 } from 'lucide-react';
+import { SEOTooltip } from './ui/seo-tooltip';
 
 interface OverallScoreProps {
   url: string;
@@ -239,7 +241,12 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                       </div>
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-sm font-semibold">Title Tag</h3>
+                      <div className="flex items-center">
+                        <h3 className="text-sm font-semibold">Title Tag</h3>
+                        <SEOTooltip term="meta title" className="ml-1">
+                          <span></span>
+                        </SEOTooltip>
+                      </div>
                       <p className="text-xs text-gray-600 mt-1">{statusChecks.title?.message || 'Not analyzed'}</p>
                     </div>
                   </div>
@@ -258,7 +265,12 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                       </div>
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-sm font-semibold">Meta Description</h3>
+                      <div className="flex items-center">
+                        <h3 className="text-sm font-semibold">Meta Description</h3>
+                        <SEOTooltip term="meta description" className="ml-1">
+                          <span></span>
+                        </SEOTooltip>
+                      </div>
                       <p className="text-xs text-gray-600 mt-1">{statusChecks.description?.message || 'Not analyzed'}</p>
                     </div>
                   </div>
@@ -277,7 +289,12 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                       </div>
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-sm font-semibold">Canonical URL</h3>
+                      <div className="flex items-center">
+                        <h3 className="text-sm font-semibold">Canonical URL</h3>
+                        <SEOTooltip term="canonical url" className="ml-1">
+                          <span></span>
+                        </SEOTooltip>
+                      </div>
                       <p className="text-xs text-gray-600 mt-1">{statusChecks.canonical?.message || 'Not analyzed'}</p>
                     </div>
                   </div>
@@ -296,7 +313,12 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                       </div>
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-sm font-semibold">Social Tags</h3>
+                      <div className="flex items-center">
+                        <h3 className="text-sm font-semibold">Social Tags</h3>
+                        <SEOTooltip term="open graph" className="ml-1">
+                          <span></span>
+                        </SEOTooltip>
+                      </div>
                       <p className="text-xs text-gray-600 mt-1">{statusChecks.social?.message || 'Not analyzed'}</p>
                     </div>
                   </div>
@@ -340,7 +362,14 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                 'bg-red-50'
               }`}>
                 <div className="mb-3 flex items-center justify-between">
-                  <h3 className="text-base font-semibold text-gray-700">SEO Health Score</h3>
+                  <div className="flex items-center">
+                    <h3 className="text-base font-semibold text-gray-700">SEO Health Score</h3>
+                    <SEOTooltip term="seo_score">
+                      <div className="ml-1 text-gray-400">
+                        <HelpCircleIcon className="h-4 w-4" />
+                      </div>
+                    </SEOTooltip>
+                  </div>
                   <div className={`text-xs font-bold px-2 py-1 rounded-md ${
                     scoreStatus === 'good' ? 'bg-success text-white' : 
                     scoreStatus === 'warning' ? 'bg-warning text-white' : 
@@ -410,32 +439,12 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                 </div>
               </div>
               
-              {/* Related Searches Section */}
+              {/* Copyright Section */}
               <div className="p-6 border-t border-gray-200">
-                <h3 className="text-base font-semibold text-gray-700 mb-3">
-                  Potential Related Search Terms
-                </h3>
-                <p className="text-xs text-gray-500 mb-4">
-                  Search terms users might use related to your content
-                </p>
-                
-                <div className="space-y-3">
-                  {seoData.title ? (
-                    generateRelatedSearches(seoData.title, url).map((search: string, index: number) => (
-                      <div key={index} className="flex items-center bg-gray-50 p-3 rounded-lg">
-                        <div className="flex-shrink-0 text-primary mr-3">
-                          <GlobeIcon className="h-4 w-4" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">{search}</p>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-sm text-gray-500 italic">
-                      No title information available for analysis
-                    </div>
-                  )}
+                <div className="flex justify-center">
+                  <p className="text-xs text-gray-500">
+                    © {new Date().getFullYear()} Ari Berkowitz - All Rights Reserved
+                  </p>
                 </div>
               </div>
             </div>

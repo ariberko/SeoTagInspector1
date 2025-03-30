@@ -36,6 +36,8 @@ const seoTerms: Record<string, string> = {
   'rich snippets': 'Enhanced search results with additional information like ratings, prices, or other data.',
   'serp': 'Search Engine Results Page - what users see after entering a search query.',
   'crawlability': 'How easy it is for search engines to discover and index your website pages.',
+  'google search': 'A preview of how your page appears in Google search results. Having optimized title and description can improve click-through rates.',
+  'seo_score': 'A calculated metric that represents how well your page is optimized for search engines based on various SEO factors.',
 };
 
 export function SEOTooltip({ term, children, icon = true, className = '' }: SEOTooltipProps) {

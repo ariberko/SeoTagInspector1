@@ -7,6 +7,7 @@ import FacebookPreview from './FacebookPreview';
 import TwitterPreview from './TwitterPreview';
 import InstagramPreview from './InstagramPreview';
 import { Search, Facebook, Twitter, Instagram, MonitorSmartphone, EyeIcon } from 'lucide-react';
+import { SEOTooltip } from './ui/seo-tooltip';
 
 interface PreviewSectionProps {
   seoData: SEOMetaTag;
@@ -18,7 +19,14 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
       <Card className="overflow-hidden shadow-sm">
         <div className="px-6 py-4 border-b border-gray-200 flex items-center">
           <EyeIcon className="h-5 w-5 text-primary mr-2" />
-          <h3 className="font-medium text-lg">Preview Appearance</h3>
+          <div className="flex items-center">
+            <h3 className="font-medium text-lg">Preview Appearance</h3>
+            <div className="ml-2">
+              <SEOTooltip term="serp">
+                <span></span>
+              </SEOTooltip>
+            </div>
+          </div>
           <div className="ml-auto flex items-center">
             <MonitorSmartphone className="h-4 w-4 text-gray-400" />
             <span className="text-xs text-gray-500 ml-1">Cross-platform previews</span>
@@ -33,8 +41,10 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
                 className="flex items-center justify-center py-3 text-sm data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=active]:rounded-none rounded-none hover:text-primary/80 transition-colors"
               >
                 <Search className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Google</span>
-                <span className="inline sm:hidden">Google</span>
+                <SEOTooltip term="google search" icon={false}>
+                  <span className="hidden sm:inline">Google</span>
+                  <span className="inline sm:hidden">Google</span>
+                </SEOTooltip>
               </TabsTrigger>
               
               <TabsTrigger 
@@ -42,8 +52,10 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
                 className="flex items-center justify-center py-3 text-sm data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=active]:rounded-none rounded-none hover:text-primary/80 transition-colors"
               >
                 <Facebook className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Facebook</span>
-                <span className="inline sm:hidden">FB</span>
+                <SEOTooltip term="open graph" icon={false}>
+                  <span className="hidden sm:inline">Facebook</span>
+                  <span className="inline sm:hidden">FB</span>
+                </SEOTooltip>
               </TabsTrigger>
               
               <TabsTrigger 
@@ -51,8 +63,10 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
                 className="flex items-center justify-center py-3 text-sm data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=active]:rounded-none rounded-none hover:text-primary/80 transition-colors"
               >
                 <Twitter className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Twitter</span>
-                <span className="inline sm:hidden">Twitter</span>
+                <SEOTooltip term="twitter card" icon={false}>
+                  <span className="hidden sm:inline">Twitter</span>
+                  <span className="inline sm:hidden">Twitter</span>
+                </SEOTooltip>
               </TabsTrigger>
               
               <TabsTrigger 
@@ -60,8 +74,10 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
                 className="flex items-center justify-center py-3 text-sm data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=active]:rounded-none rounded-none hover:text-primary/80 transition-colors"
               >
                 <Instagram className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Instagram</span>
-                <span className="inline sm:hidden">IG</span>
+                <SEOTooltip term="open graph" icon={false}>
+                  <span className="hidden sm:inline">Instagram</span>
+                  <span className="inline sm:hidden">IG</span>
+                </SEOTooltip>
               </TabsTrigger>
             </TabsList>
           </div>
