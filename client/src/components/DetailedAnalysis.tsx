@@ -3,6 +3,7 @@ import { SEOMetaTag } from '@shared/schema';
 import { StatusBadge, ProgressBar } from './ui/score-badge';
 import { calculateTitleStatus, calculateDescriptionStatus } from '@/lib/seoUtils';
 import { Check, X } from 'lucide-react';
+import { SEOTooltip } from './ui/seo-tooltip';
 
 interface DetailedAnalysisProps {
   seoData: SEOMetaTag;
@@ -58,7 +59,9 @@ export default function DetailedAnalysis({ seoData }: DetailedAnalysisProps) {
               'border-error bg-error-light/30'
             }`}>
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h4 className="text-sm font-semibold">Title Tag</h4>
+                <SEOTooltip term="meta title">
+                  <h4 className="text-sm font-semibold">Title Tag</h4>
+                </SEOTooltip>
                 <StatusBadge status={titleStatus}>
                   {titleStatus === 'good' ? 'Good' : titleStatus === 'warning' ? 'Improve' : 'Poor'}
                 </StatusBadge>
@@ -80,7 +83,9 @@ export default function DetailedAnalysis({ seoData }: DetailedAnalysisProps) {
               'border-error bg-error-light/30'
             }`}>
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h4 className="text-sm font-semibold">Meta Description</h4>
+                <SEOTooltip term="meta description">
+                  <h4 className="text-sm font-semibold">Meta Description</h4>
+                </SEOTooltip>
                 <StatusBadge status={descriptionStatus}>
                   {descriptionStatus === 'good' ? 'Good' : descriptionStatus === 'warning' ? 'Improve' : 'Poor'}
                 </StatusBadge>
@@ -102,7 +107,9 @@ export default function DetailedAnalysis({ seoData }: DetailedAnalysisProps) {
               'border-error bg-error-light/30'
             }`}>
               <div className="flex items-center justify-between">
-                <h4 className="text-sm font-semibold">Heading Tags</h4>
+                <SEOTooltip term="h1 tag">
+                  <h4 className="text-sm font-semibold">Heading Tags</h4>
+                </SEOTooltip>
                 <StatusBadge status={headingStatus}>
                   {headingStatus === 'good' ? 'Good' : headingStatus === 'warning' ? 'Improve' : 'Poor'}
                 </StatusBadge>
@@ -128,7 +135,9 @@ export default function DetailedAnalysis({ seoData }: DetailedAnalysisProps) {
               seoData.canonical ? 'border-success bg-success-light/30' : 'border-warning bg-warning-light/30'
             }`}>
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h4 className="text-sm font-semibold">Canonical URL</h4>
+                <SEOTooltip term="canonical url">
+                  <h4 className="text-sm font-semibold">Canonical URL</h4>
+                </SEOTooltip>
                 <StatusBadge status={seoData.canonical ? 'good' : 'warning'}>
                   {seoData.canonical ? 'Good' : 'Missing'}
                 </StatusBadge>
@@ -143,7 +152,9 @@ export default function DetailedAnalysis({ seoData }: DetailedAnalysisProps) {
               'border-error bg-error-light/30'
             }`}>
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h4 className="text-sm font-semibold">Social Tags</h4>
+                <SEOTooltip term="open graph">
+                  <h4 className="text-sm font-semibold">Social Tags</h4>
+                </SEOTooltip>
                 <StatusBadge status={socialStatus}>
                   {socialStatus === 'good' ? 'Complete' : socialStatus === 'warning' ? 'Partial' : 'Missing'}
                 </StatusBadge>
@@ -158,7 +169,9 @@ export default function DetailedAnalysis({ seoData }: DetailedAnalysisProps) {
                     )}
                   </div>
                   <span className={`text-sm font-medium ${hasOgTags ? 'text-success' : 'text-error'}`}>
-                    Open Graph Tags
+                    <SEOTooltip term="open graph" icon={false}>
+                      Open Graph Tags
+                    </SEOTooltip>
                   </span>
                 </div>
                 
@@ -171,7 +184,9 @@ export default function DetailedAnalysis({ seoData }: DetailedAnalysisProps) {
                     )}
                   </div>
                   <span className={`text-sm font-medium ${hasTwitterTags ? 'text-success' : 'text-error'}`}>
-                    Twitter Card Tags
+                    <SEOTooltip term="twitter card" icon={false}>
+                      Twitter Card Tags
+                    </SEOTooltip>
                   </span>
                 </div>
               </div>

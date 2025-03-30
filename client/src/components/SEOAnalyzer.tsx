@@ -5,6 +5,7 @@ import PreviewSection from './PreviewSection';
 import DetailedAnalysis from './DetailedAnalysis';
 import Recommendations from './Recommendations';
 import SummaryStats from './SummaryStats';
+import CompetitorAnalysis from './CompetitorAnalysis';
 import { useSEOAnalysis } from '@/hooks/useSEOAnalysis';
 import { SEOMetaTag } from '@shared/schema';
 
@@ -55,6 +56,8 @@ export default function SEOAnalyzer() {
               <Recommendations recommendations={seoData.recommendations || []} />
             </div>
           </div>
+          
+          <CompetitorAnalysis url={url} seoData={seoData} />
           
           <div className="text-center text-xs text-gray-500 mt-12 pb-4 border-t pt-4">
             © {new Date().getFullYear()} SEO Tag Inspector. All rights reserved to Ari Berkowitz.

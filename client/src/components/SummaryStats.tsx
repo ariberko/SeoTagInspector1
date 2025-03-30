@@ -12,6 +12,7 @@ import {
   Twitter,
   Instagram
 } from 'lucide-react';
+import { SEOTooltip } from './ui/seo-tooltip';
 
 interface SummaryStatsProps {
   seoData: SEOMetaTag;
@@ -86,7 +87,9 @@ export default function SummaryStats({ seoData }: SummaryStatsProps) {
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
           <div className="flex items-center">
             <BarChart className="h-5 w-5 text-primary mr-2" />
-            <h3 className="font-medium text-lg">SEO Summary</h3>
+            <SEOTooltip term="seo score">
+              <h3 className="font-medium text-lg">SEO Summary</h3>
+            </SEOTooltip>
           </div>
           <div className={`px-3 py-1 rounded-full text-sm font-medium ${healthStatus.bgColor} ${healthStatus.color}`}>
             {healthStatus.text}
@@ -127,7 +130,9 @@ export default function SummaryStats({ seoData }: SummaryStatsProps) {
             <div className="border border-gray-200 rounded-lg p-5 shadow-sm">
               <div className="flex items-center mb-4">
                 <LayoutGrid className="h-5 w-5 text-primary mr-2" />
-                <h4 className="text-base font-medium">Heading Structure</h4>
+                <SEOTooltip term="h1 tag">
+                  <h4 className="text-base font-medium">Heading Structure</h4>
+                </SEOTooltip>
               </div>
               
               <div className="space-y-3">
@@ -175,7 +180,9 @@ export default function SummaryStats({ seoData }: SummaryStatsProps) {
             <div className="border border-gray-200 rounded-lg p-5 shadow-sm">
               <div className="flex items-center mb-4">
                 <Share2 className="h-5 w-5 text-primary mr-2" />
-                <h4 className="text-base font-medium">Social Media Coverage</h4>
+                <SEOTooltip term="open graph">
+                  <h4 className="text-base font-medium">Social Media Coverage</h4>
+                </SEOTooltip>
               </div>
               
               <div className="relative">
