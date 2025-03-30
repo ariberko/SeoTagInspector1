@@ -3,11 +3,50 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --success: 142, 72%, 29%;
+    --warning: 38, 92%, 50%;
+    --error: 0, 84%, 60%;
+    --success-bg: 142, 72%, 95%;
+    --warning-bg: 38, 92%, 95%;
+    --error-bg: 0, 84%, 95%;
+  }
+
   * {
     @apply border-border;
   }
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .bg-success {
+    background-color: hsl(var(--success));
+  }
+  .bg-warning {
+    background-color: hsl(var(--warning));
+  }
+  .bg-error {
+    background-color: hsl(var(--error));
+  }
+  .text-success {
+    color: hsl(var(--success));
+  }
+  .text-warning {
+    color: hsl(var(--warning));
+  }
+  .text-error {
+    color: hsl(var(--error));
+  }
+  .bg-success-light {
+    background-color: hsl(var(--success-bg));
+  }
+  .bg-warning-light {
+    background-color: hsl(var(--warning-bg));
+  }
+  .bg-error-light {
+    background-color: hsl(var(--error-bg));
   }
 }

@@ -2,6 +2,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { SEOMetaTag } from '@shared/schema';
 import { StatusBadge, ProgressBar } from './ui/score-badge';
 import { calculateTitleStatus, calculateDescriptionStatus } from '@/lib/seoUtils';
+import { Check, X } from 'lucide-react';
 
 interface DetailedAnalysisProps {
   seoData: SEOMetaTag;
@@ -31,116 +32,149 @@ export default function DetailedAnalysis({ seoData }: DetailedAnalysisProps) {
   const hasTwitterTags = Boolean(seoData.twitterCard && seoData.twitterTitle);
   const socialStatus = hasOgTags && hasTwitterTags ? 'good' : !hasOgTags && !hasTwitterTags ? 'error' : 'warning';
   
+  // Get background color and text color based on status
+  const getStatusColors = (status: 'good' | 'warning' | 'error') => {
+    const colors = {
+      good: 'bg-success-light text-success',
+      warning: 'bg-warning-light text-warning',
+      error: 'bg-error-light text-error'
+    };
+    return colors[status];
+  };
+  
   return (
-    <section className="mb-8">
-      <Card className="overflow-hidden">
+    <section>
+      <Card className="overflow-hidden shadow-sm">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="font-medium">Detailed Tag Analysis</h3>
+          <h3 className="font-medium text-lg">Detailed Tag Analysis</h3>
         </div>
         
         <CardContent className="p-6 pt-4">
           <div className="space-y-6">
             {/* Title Tag Analysis */}
-            <div>
-              <div className="flex items-center justify-between">
-                <h4 className="text-sm font-medium">Title Tag</h4>
+            <div className={`p-4 rounded-lg border border-opacity-20 ${
+              titleStatus === 'good' ? 'border-success bg-success-light/30' : 
+              titleStatus === 'warning' ? 'border-warning bg-warning-light/30' : 
+              'border-error bg-error-light/30'
+            }`}>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h4 className="text-sm font-semibold">Title Tag</h4>
                 <StatusBadge status={titleStatus}>
                   {titleStatus === 'good' ? 'Good' : titleStatus === 'warning' ? 'Improve' : 'Poor'}
                 </StatusBadge>
               </div>
-              <p className="mt-1 text-sm text-gray-600 truncate">{seoData.title || 'No title found'}</p>
-              <ProgressBar percentage={titlePercentage} status={titleStatus} className="mt-1" />
-              <div className="mt-1 flex justify-between text-xs text-gray-500">
-                <span>{titleLength} characters</span>
-                <span>Recommended: 50-60</span>
+              <p className="mt-2 text-sm break-words">{seoData.title || 'No title found'}</p>
+              <div className="mt-3">
+                <ProgressBar percentage={titlePercentage} status={titleStatus} />
+                <div className="mt-1 flex justify-between text-xs text-gray-500">
+                  <span>{titleLength} characters</span>
+                  <span>Recommended: 50-60</span>
+                </div>
               </div>
             </div>
             
             {/* Meta Description Analysis */}
-            <div>
-              <div className="flex items-center justify-between">
-                <h4 className="text-sm font-medium">Meta Description</h4>
+            <div className={`p-4 rounded-lg border border-opacity-20 ${
+              descriptionStatus === 'good' ? 'border-success bg-success-light/30' : 
+              descriptionStatus === 'warning' ? 'border-warning bg-warning-light/30' : 
+              'border-error bg-error-light/30'
+            }`}>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h4 className="text-sm font-semibold">Meta Description</h4>
                 <StatusBadge status={descriptionStatus}>
                   {descriptionStatus === 'good' ? 'Good' : descriptionStatus === 'warning' ? 'Improve' : 'Poor'}
                 </StatusBadge>
               </div>
-              <p className="mt-1 text-sm text-gray-600">{seoData.description ? seoData.description.substring(0, 120) + (seoData.description.length > 120 ? '...' : '') : 'No description found'}</p>
-              <ProgressBar percentage={descriptionPercentage} status={descriptionStatus} className="mt-1" />
-              <div className="mt-1 flex justify-between text-xs text-gray-500">
-                <span>{descriptionLength} characters</span>
-                <span>Recommended: 150-160</span>
+              <p className="mt-2 text-sm break-words">{seoData.description ? seoData.description.substring(0, 120) + (seoData.description.length > 120 ? '...' : '') : 'No description found'}</p>
+              <div className="mt-3">
+                <ProgressBar percentage={descriptionPercentage} status={descriptionStatus} />
+                <div className="mt-1 flex justify-between text-xs text-gray-500">
+                  <span>{descriptionLength} characters</span>
+                  <span>Recommended: 150-160</span>
+                </div>
               </div>
             </div>
             
             {/* Heading Tags Analysis */}
-            <div>
+            <div className={`p-4 rounded-lg border border-opacity-20 ${
+              headingStatus === 'good' ? 'border-success bg-success-light/30' : 
+              headingStatus === 'warning' ? 'border-warning bg-warning-light/30' : 
+              'border-error bg-error-light/30'
+            }`}>
               <div className="flex items-center justify-between">
-                <h4 className="text-sm font-medium">Heading Tags</h4>
+                <h4 className="text-sm font-semibold">Heading Tags</h4>
                 <StatusBadge status={headingStatus}>
                   {headingStatus === 'good' ? 'Good' : headingStatus === 'warning' ? 'Improve' : 'Poor'}
                 </StatusBadge>
               </div>
-              <ul className="mt-2 space-y-2 text-sm text-gray-600">
-                <li className="flex justify-between">
-                  <span>H1 tags</span>
-                  <span className="font-medium">{h1Count}</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>H2 tags</span>
-                  <span className="font-medium">{h2Count}</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>H3 tags</span>
-                  <span className="font-medium">{h3Count}</span>
-                </li>
-              </ul>
+              <div className="mt-3 grid grid-cols-3 gap-2">
+                <div className={`p-3 rounded text-center ${getStatusColors(h1Count === 1 ? 'good' : h1Count === 0 ? 'error' : 'warning')}`}>
+                  <div className="font-bold text-xl">{h1Count}</div>
+                  <div className="text-xs font-medium mt-1">H1 Tags</div>
+                </div>
+                <div className="p-3 rounded bg-gray-100 text-center">
+                  <div className="font-bold text-xl">{h2Count}</div>
+                  <div className="text-xs font-medium text-gray-600 mt-1">H2 Tags</div>
+                </div>
+                <div className="p-3 rounded bg-gray-100 text-center">
+                  <div className="font-bold text-xl">{h3Count}</div>
+                  <div className="text-xs font-medium text-gray-600 mt-1">H3 Tags</div>
+                </div>
+              </div>
             </div>
 
             {/* Canonical URL Analysis */}
-            <div>
-              <div className="flex items-center justify-between">
-                <h4 className="text-sm font-medium">Canonical URL</h4>
+            <div className={`p-4 rounded-lg border border-opacity-20 ${
+              seoData.canonical ? 'border-success bg-success-light/30' : 'border-warning bg-warning-light/30'
+            }`}>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h4 className="text-sm font-semibold">Canonical URL</h4>
                 <StatusBadge status={seoData.canonical ? 'good' : 'warning'}>
                   {seoData.canonical ? 'Good' : 'Missing'}
                 </StatusBadge>
               </div>
-              <p className="mt-1 text-sm text-gray-600 break-words">{seoData.canonical || 'No canonical URL found'}</p>
+              <p className="mt-2 text-sm break-words">{seoData.canonical || 'No canonical URL found'}</p>
             </div>
             
             {/* Social Tags Analysis */}
-            <div>
-              <div className="flex items-center justify-between">
-                <h4 className="text-sm font-medium">Social Tags</h4>
+            <div className={`p-4 rounded-lg border border-opacity-20 ${
+              socialStatus === 'good' ? 'border-success bg-success-light/30' : 
+              socialStatus === 'warning' ? 'border-warning bg-warning-light/30' : 
+              'border-error bg-error-light/30'
+            }`}>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h4 className="text-sm font-semibold">Social Tags</h4>
                 <StatusBadge status={socialStatus}>
                   {socialStatus === 'good' ? 'Complete' : socialStatus === 'warning' ? 'Partial' : 'Missing'}
                 </StatusBadge>
               </div>
-              <ul className="mt-2 space-y-2 text-sm">
-                <li className="flex items-center">
-                  {hasOgTags ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-success mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-error mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  )}
-                  <span>Open Graph tags</span>
-                </li>
-                <li className="flex items-center">
-                  {hasTwitterTags ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-success mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-error mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  )}
-                  <span>Twitter Card tags</span>
-                </li>
-              </ul>
+              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className={`p-3 rounded ${hasOgTags ? 'bg-success-light' : 'bg-error-light'} flex items-center`}>
+                  <div className={`h-6 w-6 rounded-full ${hasOgTags ? 'bg-success' : 'bg-error'} flex items-center justify-center mr-2`}>
+                    {hasOgTags ? (
+                      <Check className="h-4 w-4 text-white" />
+                    ) : (
+                      <X className="h-4 w-4 text-white" />
+                    )}
+                  </div>
+                  <span className={`text-sm font-medium ${hasOgTags ? 'text-success' : 'text-error'}`}>
+                    Open Graph Tags
+                  </span>
+                </div>
+                
+                <div className={`p-3 rounded ${hasTwitterTags ? 'bg-success-light' : 'bg-error-light'} flex items-center`}>
+                  <div className={`h-6 w-6 rounded-full ${hasTwitterTags ? 'bg-success' : 'bg-error'} flex items-center justify-center mr-2`}>
+                    {hasTwitterTags ? (
+                      <Check className="h-4 w-4 text-white" />
+                    ) : (
+                      <X className="h-4 w-4 text-white" />
+                    )}
+                  </div>
+                  <span className={`text-sm font-medium ${hasTwitterTags ? 'text-success' : 'text-error'}`}>
+                    Twitter Card Tags
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </CardContent>
