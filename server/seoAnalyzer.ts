@@ -1,7 +1,7 @@
 import * as cheerio from 'cheerio';
 import fetch from 'node-fetch';
-import { SEOMetaTag, Competitor } from '@shared/schema';
-import { calculateSEOScore, calculateGrade, generateRecommendations } from '@/lib/seoUtils';
+import { SEOMetaTag } from '@shared/schema';
+import { calculateSEOScore, generateRecommendations } from '@/lib/seoUtils';
 
 class SEOAnalyzer {
   async analyzeSEO(url: string): Promise<SEOMetaTag> {
@@ -97,28 +97,15 @@ class SEOAnalyzer {
         statusChecks.social = { status: 'error', message: 'Missing all social tags' };
       }
       
-      // Calculate content length
-      const contentLength = $('body').text().trim().length;
-      seoData.contentLength = contentLength;
-      
       // Calculate the overall SEO score
       const score = calculateSEOScore(seoData);
-      
-      // Calculate grade from score
-      const grade = calculateGrade(score);
       
       // Generate recommendations
       const recommendations = generateRecommendations(seoData);
       
-      // Generate sample competitors based on the domain
-      const competitors = this.getCompetitorsByDomain(url, score);
-      
       return {
         ...seoData,
         score,
-        grade,
-        contentLength,
-        competitors,
         statusChecks,
         recommendations
       } as SEOMetaTag;
@@ -153,138 +140,6 @@ class SEOAnalyzer {
       return `${urlObj.protocol}//${urlObj.hostname}/favicon.ico`;
     } catch {
       return '/favicon.ico';
-    }
-  }
-
-  private getCompetitorsByDomain(url: string, currentScore: number): Competitor[] {
-    try {
-      const domain = new URL(url).hostname.replace('www.', '');
-      
-      // Popular websites by industry
-      const competitors: {[key: string]: Competitor[]} = {
-        // Social Media
-        'linkedin.com': [
-          {
-            url: 'https://www.glassdoor.com',
-            title: 'Glassdoor - Job & Company Reviews',
-            score: Math.min(95, currentScore + 15),
-            strengths: [
-              'Strong meta title optimization',
-              'Complete social media tags',
-              'Mobile-friendly design',
-              'Comprehensive job listings schema'
-            ]
-          },
-          {
-            url: 'https://www.indeed.com',
-            title: 'Indeed - Job Search Engine',
-            score: Math.min(92, currentScore + 12),
-            strengths: [
-              'Rich structured data markup',
-              'Strong internal linking',
-              'Fast page loading speed',
-              'Well-optimized mobile experience'
-            ]
-          },
-          {
-            url: 'https://www.ziprecruiter.com',
-            title: 'ZipRecruiter - Employment Marketplace',
-            score: Math.min(90, currentScore + 10),
-            strengths: [
-              'Excellent keyword density',
-              'High-quality backlinks',
-              'Optimized image alt texts',
-              'Clear site hierarchy'
-            ]
-          }
-        ],
-        // Tech
-        'apple.com': [
-          {
-            url: 'https://www.samsung.com',
-            title: 'Samsung - Electronics & Mobile Devices',
-            score: Math.min(95, currentScore + 15),
-            strengths: [
-              'Comprehensive product schema markup',
-              'Excellent image optimization',
-              'Clean canonical implementation',
-              'Multi-language SEO structure'
-            ]
-          },
-          {
-            url: 'https://www.microsoft.com',
-            title: 'Microsoft - Software & Services',
-            score: Math.min(92, currentScore + 12),
-            strengths: [
-              'Perfect heading structure',
-              'Fast page loading speed',
-              'Strong internal linking',
-              'Optimized mobile experience'
-            ]
-          },
-          {
-            url: 'https://www.google.com',
-            title: 'Google - Search & Services',
-            score: Math.min(90, currentScore + 10),
-            strengths: [
-              'Minimalist, fast-loading pages',
-              'Excellent accessibility',
-              'Perfect mobile optimization',
-              'Clear site architecture'
-            ]
-          }
-        ],
-        // Default competitors for all other domains
-        'default': [
-          {
-            url: 'https://www.hubspot.com',
-            title: 'HubSpot - Marketing & Sales Platform',
-            score: Math.min(95, currentScore + 15),
-            strengths: [
-              'Strong meta title optimization',
-              'Excellent heading structure',
-              'Complete social media tags',
-              'Faster page loading speed'
-            ]
-          },
-          {
-            url: 'https://www.wordpress.com',
-            title: 'WordPress - Website Building Platform',
-            score: Math.min(92, currentScore + 12),
-            strengths: [
-              'Rich structured data markup',
-              'Comprehensive meta description',
-              'Mobile-friendly design',
-              'Strong internal linking'
-            ]
-          },
-          {
-            url: 'https://www.wix.com',
-            title: 'Wix - Website Builder',
-            score: Math.min(90, currentScore + 10),
-            strengths: [
-              'Perfect keyword density',
-              'High-quality backlinks',
-              'Optimized image alt texts',
-              'Well-structured URL hierarchy'
-            ]
-          }
-        ]
-      };
-      
-      // Look for exact domain match first
-      for (const key in competitors) {
-        if (domain.includes(key)) {
-          return competitors[key];
-        }
-      }
-      
-      // Return default competitors if no match found
-      return competitors['default'] || [];
-    } catch (e) {
-      console.error('Error generating competitors:', e);
-      // Return empty array as fallback
-      return [];
     }
   }
 }

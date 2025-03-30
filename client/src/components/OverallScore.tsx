@@ -13,11 +13,9 @@ import {
   BadgeCheckIcon,
   ShieldIcon,
   SearchIcon,
-  HelpCircleIcon,
-  Award
+  HelpCircleIcon
 } from 'lucide-react';
 import { SEOTooltip } from './ui/seo-tooltip';
-import { calculateGrade, getGradeColor } from '@/lib/seoUtils';
 
 interface OverallScoreProps {
   url: string;
@@ -92,13 +90,9 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
   
   // Get label based on score
   const getScoreLabel = (score: number) => {
-    if (score >= 90) return 'Excellent';
-    if (score >= 80) return 'Very Good';
-    if (score >= 70) return 'Good';
-    if (score >= 60) return 'Fair';
+    if (score >= 80) return 'Good';
     if (score >= 50) return 'Needs Improvement';
-    if (score >= 40) return 'Poor';
-    return 'Critical Issues';
+    return 'Poor';
   };
   
   // Get grade based on score
@@ -376,13 +370,20 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                       </div>
                     </SEOTooltip>
                   </div>
+                  <div className={`text-xs font-bold px-2 py-1 rounded-md ${
+                    scoreStatus === 'good' ? 'bg-success text-white' : 
+                    scoreStatus === 'warning' ? 'bg-warning text-white' : 
+                    'bg-error text-white'
+                  }`}>
+                    Grade: {getScoreGrade(score)}
+                  </div>
                 </div>
                 
                 <div className="flex items-center mb-6">
-                  <div className="mr-5 relative">
+                  <div className="mr-4">
                     <CircularProgress 
                       value={score} 
-                      size={110} 
+                      size={100} 
                       strokeWidth={8}
                       showValue
                       valueClassName={`text-2xl font-bold ${
@@ -392,26 +393,13 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                       }`}
                       status={scoreStatus}
                     />
-                    {/* Grade Display */}
-                    <div 
-                      className="absolute -top-2 -right-2 w-10 h-10 rounded-full shadow-md flex items-center justify-center" 
-                      style={{ 
-                        backgroundColor: getGradeColor(calculateGrade(score)),
-                        border: '2px solid white'
-                      }}
-                    >
-                      <div className="text-white font-bold text-lg">
-                        {calculateGrade(score)}
-                      </div>
-                    </div>
                   </div>
                   <div className="flex-1">
-                    <h4 className={`text-xl font-bold flex items-center ${
+                    <h4 className={`text-xl font-bold ${
                       scoreStatus === 'good' ? 'text-success' : 
                       scoreStatus === 'warning' ? 'text-warning' : 
                       'text-error'
                     }`}>
-                      <Award className="h-5 w-5 mr-1" />
                       {getScoreLabel(score)}
                     </h4>
                     <p className="text-sm text-gray-600 mt-1">
