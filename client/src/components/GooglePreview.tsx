@@ -33,17 +33,31 @@ export default function GooglePreview({ seoData }: GooglePreviewProps) {
   
   // Get title status
   const getTitleStatus = () => {
-    if (!seoData.title) return { icon: <AlertCircle className="h-4 w-4 text-error" />, text: 'Title tag is missing', color: 'text-error' };
-    if (seoData.title.length < 30) return { icon: <AlertCircle className="h-4 w-4 text-warning" />, text: 'Title is too short', color: 'text-warning' };
-    if (seoData.title.length > 60) return { icon: <AlertCircle className="h-4 w-4 text-warning" />, text: 'Title is too long', color: 'text-warning' };
+    if (!seoData.title) {
+      return { icon: <AlertCircle className="h-4 w-4 text-error" />, text: 'Title tag is missing', color: 'text-error' };
+    }
+    const titleLength = seoData.title.length;
+    if (titleLength < 30) {
+      return { icon: <AlertCircle className="h-4 w-4 text-warning" />, text: 'Title is too short', color: 'text-warning' };
+    }
+    if (titleLength > 60) {
+      return { icon: <AlertCircle className="h-4 w-4 text-warning" />, text: 'Title is too long', color: 'text-warning' };
+    }
     return { icon: <CheckCircle className="h-4 w-4 text-success" />, text: 'Title length is optimal', color: 'text-success' };
   };
   
   // Get description status
   const getDescriptionStatus = () => {
-    if (!seoData.description) return { icon: <AlertCircle className="h-4 w-4 text-error" />, text: 'Meta description is missing', color: 'text-error' };
-    if (seoData.description.length < 120) return { icon: <AlertCircle className="h-4 w-4 text-warning" />, text: 'Description is too short', color: 'text-warning' };
-    if (seoData.description.length > 160) return { icon: <AlertCircle className="h-4 w-4 text-warning" />, text: 'Description is too long', color: 'text-warning' };
+    if (!seoData.description) {
+      return { icon: <AlertCircle className="h-4 w-4 text-error" />, text: 'Meta description is missing', color: 'text-error' };
+    }
+    const descLength = seoData.description.length;
+    if (descLength < 120) {
+      return { icon: <AlertCircle className="h-4 w-4 text-warning" />, text: 'Description is too short', color: 'text-warning' };
+    }
+    if (descLength > 160) {
+      return { icon: <AlertCircle className="h-4 w-4 text-warning" />, text: 'Description is too long', color: 'text-warning' };
+    }
     return { icon: <CheckCircle className="h-4 w-4 text-success" />, text: 'Description length is optimal', color: 'text-success' };
   };
   
@@ -104,7 +118,7 @@ export default function GooglePreview({ seoData }: GooglePreviewProps) {
                 <span className={`font-semibold ${titleStatus.color}`}>{titleStatus.text}</span>
                 <p className="text-sm text-gray-600 mt-1">
                   Current length: {seoData.title?.length || 0}/60 characters
-                  {seoData.title?.length > 60 && (
+                  {seoData.title && seoData.title.length > 60 && (
                     <span className="block mt-1 text-orange-600">Google may truncate your title in search results</span>
                   )}
                 </p>
@@ -119,7 +133,7 @@ export default function GooglePreview({ seoData }: GooglePreviewProps) {
                 <span className={`font-semibold ${descriptionStatus.color}`}>{descriptionStatus.text}</span>
                 <p className="text-sm text-gray-600 mt-1">
                   Current length: {seoData.description?.length || 0}/160 characters
-                  {seoData.description?.length > 160 && (
+                  {seoData.description && seoData.description.length > 160 && (
                     <span className="block mt-1 text-orange-600">Google may truncate your description in search results</span>
                   )}
                 </p>

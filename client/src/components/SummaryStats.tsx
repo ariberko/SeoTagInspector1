@@ -7,7 +7,10 @@ import {
   Clock, 
   LayoutGrid, 
   Share2, 
-  BarChart
+  BarChart,
+  Facebook,
+  Twitter,
+  Instagram
 } from 'lucide-react';
 
 interface SummaryStatsProps {
@@ -211,11 +214,7 @@ export default function SummaryStats({ seoData }: SummaryStatsProps) {
               <div className="mt-4 grid grid-cols-2 gap-3">
                 <div className={`p-3 rounded-lg ${seoData.ogTitle && seoData.ogDescription ? 'bg-success-light' : 'bg-error-light'} flex items-center`}>
                   <div className={`h-8 w-8 rounded-full ${seoData.ogTitle && seoData.ogDescription ? 'bg-success' : 'bg-error'} flex items-center justify-center mr-2`}>
-                    {seoData.ogTitle && seoData.ogDescription ? (
-                      <CheckCircle className="h-4 w-4 text-white" />
-                    ) : (
-                      <AlertCircle className="h-4 w-4 text-white" />
-                    )}
+                    <Facebook className="h-4 w-4 text-white" />
                   </div>
                   <div>
                     <span className="text-xs font-medium">Facebook</span>
@@ -227,16 +226,42 @@ export default function SummaryStats({ seoData }: SummaryStatsProps) {
                 
                 <div className={`p-3 rounded-lg ${seoData.twitterCard && seoData.twitterTitle ? 'bg-success-light' : 'bg-error-light'} flex items-center`}>
                   <div className={`h-8 w-8 rounded-full ${seoData.twitterCard && seoData.twitterTitle ? 'bg-success' : 'bg-error'} flex items-center justify-center mr-2`}>
-                    {seoData.twitterCard && seoData.twitterTitle ? (
-                      <CheckCircle className="h-4 w-4 text-white" />
-                    ) : (
-                      <AlertCircle className="h-4 w-4 text-white" />
-                    )}
+                    <Twitter className="h-4 w-4 text-white" />
                   </div>
                   <div>
                     <span className="text-xs font-medium">Twitter</span>
                     <div className={`text-xs ${seoData.twitterCard && seoData.twitterTitle ? 'text-success' : 'text-error'}`}>
                       {seoData.twitterCard && seoData.twitterTitle ? 'Complete' : 'Incomplete'}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className={`p-3 rounded-lg ${seoData.ogImage ? 'bg-success-light' : 'bg-error-light'} flex items-center`}>
+                  <div className={`h-8 w-8 rounded-full ${seoData.ogImage ? 'bg-success' : 'bg-error'} flex items-center justify-center mr-2`}>
+                    <Instagram className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-medium">Instagram</span>
+                    <div className={`text-xs ${seoData.ogImage ? 'text-success' : 'text-error'}`}>
+                      {seoData.ogImage ? 'Ready for sharing' : 'Missing image'}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="p-3 rounded-lg bg-gray-100 flex items-center">
+                  <div className="h-8 w-8 rounded-full bg-gray-400 flex items-center justify-center mr-2">
+                    <Share2 className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-medium">Overall</span>
+                    <div className={`text-xs ${
+                      socialTagsPresent / socialTagsTotal > 0.7 
+                        ? 'text-success' 
+                        : socialTagsPresent / socialTagsTotal > 0.4 
+                          ? 'text-warning' 
+                          : 'text-error'
+                    }`}>
+                      {Math.round((socialTagsPresent / socialTagsTotal) * 100)}% optimized
                     </div>
                   </div>
                 </div>

@@ -5,7 +5,8 @@ import { SEOMetaTag } from '@shared/schema';
 import GooglePreview from './GooglePreview';
 import FacebookPreview from './FacebookPreview';
 import TwitterPreview from './TwitterPreview';
-import { Search, Facebook, Twitter, MonitorSmartphone, EyeIcon } from 'lucide-react';
+import InstagramPreview from './InstagramPreview';
+import { Search, Facebook, Twitter, Instagram, MonitorSmartphone, EyeIcon } from 'lucide-react';
 
 interface PreviewSectionProps {
   seoData: SEOMetaTag;
@@ -26,13 +27,13 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
         
         <Tabs defaultValue="google" className="w-full">
           <div className="border-b border-gray-200 px-3 pt-2 bg-gray-50">
-            <TabsList className="grid grid-cols-3 sm:max-w-md h-auto bg-transparent p-0 rounded-none">
+            <TabsList className="grid grid-cols-4 sm:max-w-2xl h-auto bg-transparent p-0 rounded-none">
               <TabsTrigger 
                 value="google"
                 className="flex items-center justify-center py-3 text-sm data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=active]:rounded-none rounded-none hover:text-primary/80 transition-colors"
               >
                 <Search className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Google Preview</span>
+                <span className="hidden sm:inline">Google</span>
                 <span className="inline sm:hidden">Google</span>
               </TabsTrigger>
               
@@ -41,8 +42,8 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
                 className="flex items-center justify-center py-3 text-sm data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=active]:rounded-none rounded-none hover:text-primary/80 transition-colors"
               >
                 <Facebook className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Facebook Preview</span>
-                <span className="inline sm:hidden">Facebook</span>
+                <span className="hidden sm:inline">Facebook</span>
+                <span className="inline sm:hidden">FB</span>
               </TabsTrigger>
               
               <TabsTrigger 
@@ -50,8 +51,17 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
                 className="flex items-center justify-center py-3 text-sm data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=active]:rounded-none rounded-none hover:text-primary/80 transition-colors"
               >
                 <Twitter className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Twitter Preview</span>
+                <span className="hidden sm:inline">Twitter</span>
                 <span className="inline sm:hidden">Twitter</span>
+              </TabsTrigger>
+              
+              <TabsTrigger 
+                value="instagram"
+                className="flex items-center justify-center py-3 text-sm data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=active]:rounded-none rounded-none hover:text-primary/80 transition-colors"
+              >
+                <Instagram className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Instagram</span>
+                <span className="inline sm:hidden">IG</span>
               </TabsTrigger>
             </TabsList>
           </div>
@@ -82,6 +92,15 @@ export default function PreviewSection({ seoData }: PreviewSectionProps) {
                 </p>
               </div>
               <TwitterPreview seoData={seoData} />
+            </TabsContent>
+            
+            <TabsContent value="instagram" className="mt-0">
+              <div className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-opacity-10 p-4 rounded-lg mb-4">
+                <p className="text-sm text-purple-900">
+                  Instagram uses Open Graph tags for image shares. A properly configured og:image tag ensures your content looks great when shared.
+                </p>
+              </div>
+              <InstagramPreview seoData={seoData} />
             </TabsContent>
           </CardContent>
         </Tabs>

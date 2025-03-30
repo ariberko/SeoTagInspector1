@@ -55,7 +55,7 @@ export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) 
                 type="url" 
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                className="pl-10 pr-3 py-6 border-2 focus:border-primary transition-colors"
+                className="pl-10 pr-3 py-6 border-2 bg-white text-gray-800 focus:border-primary transition-colors"
                 placeholder="https://example.com" 
                 required
               />

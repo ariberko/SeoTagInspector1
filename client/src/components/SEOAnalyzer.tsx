@@ -55,6 +55,10 @@ export default function SEOAnalyzer() {
               <Recommendations recommendations={seoData.recommendations || []} />
             </div>
           </div>
+          
+          <div className="text-center text-xs text-gray-500 mt-12 pb-4 border-t pt-4">
+            © {new Date().getFullYear()} SEO Tag Inspector. All rights reserved to Ari Berkowitz.
+          </div>
         </div>
       )}
     </div>

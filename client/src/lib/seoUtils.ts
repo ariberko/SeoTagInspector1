@@ -59,8 +59,22 @@ export const calculateSEOScore = (seoData: any): number => {
   }
   
   // Social tags analysis
-  if (!seoData.ogTitle || !seoData.ogDescription || !seoData.ogImage) {
-    score -= 10;
+  let missingOgTags = 0;
+  if (!seoData.ogTitle) missingOgTags++;
+  if (!seoData.ogDescription) missingOgTags++;
+  if (!seoData.ogImage) missingOgTags++;
+  
+  if (missingOgTags === 3) {
+    score -= 15; // Missing all OG tags is a bigger issue
+  } else if (missingOgTags > 0) {
+    score -= 5 * missingOgTags; // Deduct points for each missing OG tag
+  }
+  
+  // Specifically check for Instagram-friendly image
+  if (seoData.ogImage) {
+    // No way to check image dimensions server-side without loading the image
+    // But we can check if it exists at least
+    score += 5;
   }
   
   if (!seoData.twitterCard || !seoData.twitterTitle) {
@@ -136,7 +150,16 @@ export const generateRecommendations = (seoData: any) => {
     recommendations.push({
       type: 'warning',
       title: 'Complete Open Graph meta tags',
-      description: 'Adding Open Graph tags will improve how your content appears when shared on Facebook and other platforms.'
+      description: 'Adding Open Graph tags will improve how your content appears when shared on Facebook, Instagram, and other platforms.'
+    });
+  }
+  
+  // Instagram specific recommendation for image
+  if (!seoData.ogImage) {
+    recommendations.push({
+      type: 'warning',
+      title: 'Add og:image for Instagram sharing',
+      description: 'Instagram relies on the og:image tag for shared links. Adding a square image (1:1 ratio) improves appearance.'
     });
   }
   
@@ -163,6 +186,16 @@ export const generateRecommendations = (seoData: any) => {
       type: 'success',
       title: 'Good heading structure',
       description: 'Your page has a clear H1 tag and a logical heading hierarchy, which helps with SEO ranking.'
+    });
+  }
+  
+  // If social media tags are well configured
+  if (seoData.ogTitle && seoData.ogDescription && seoData.ogImage && 
+      seoData.twitterCard && seoData.twitterTitle) {
+    recommendations.push({
+      type: 'success',
+      title: 'Excellent social media optimization',
+      description: 'Your page is well-optimized for sharing across Facebook, Instagram, Twitter, and other platforms.'
     });
   }
   
