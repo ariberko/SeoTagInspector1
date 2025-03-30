@@ -8,6 +8,7 @@ import SummaryStats from './SummaryStats';
 import CompetitorAnalysis from './CompetitorAnalysis';
 import { useSEOAnalysis } from '@/hooks/useSEOAnalysis';
 import { SEOMetaTag } from '@shared/schema';
+import { useTheme } from '@/context/ThemeContext';
 
 export default function SEOAnalyzer() {
   const [url, setUrl] = useState<string>('');
@@ -17,6 +18,7 @@ export default function SEOAnalyzer() {
     isLoading, 
     error 
   } = useSEOAnalysis();
+  const { theme } = useTheme();
 
   const handleUrlSubmit = async (submittedUrl: string) => {
     setUrl(submittedUrl);
@@ -59,7 +61,7 @@ export default function SEOAnalyzer() {
           
           <CompetitorAnalysis url={url} seoData={seoData} />
           
-          <div className="text-center text-xs text-gray-500 mt-12 pb-4 border-t pt-4">
+          <div className={`text-center text-xs ${theme === 'dark' ? 'text-gray-400 border-gray-700' : 'text-gray-500 border-gray-200'} mt-12 pb-4 border-t pt-4`}>
             © {new Date().getFullYear()} SEO Tag Inspector. All rights reserved to Ari Berkowitz.
           </div>
         </div>
