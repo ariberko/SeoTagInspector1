@@ -25,10 +25,62 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
   const statusChecks = seoData.statusChecks || {};
   
   // Determine score status for circular progress
-  const getScoreStatus = (score: number) => {
+  const getScoreStatus = (score: number): 'good' | 'warning' | 'error' => {
     if (score >= 80) return 'good';
     if (score >= 50) return 'warning';
     return 'error';
+  };
+  
+  // Get the score status once
+  const scoreStatus = getScoreStatus(score);
+  
+  // Handle exporting the SEO report
+  const handleExportReport = () => {
+    try {
+      // Create report data in CSV format
+      const reportDate = new Date().toLocaleDateString();
+      const csvContent = [
+        // Headers
+        ['SEO Analysis Report', '', ''],
+        [`URL: ${url}`, '', ''],
+        [`Date: ${reportDate}`, '', ''],
+        [`Overall Score: ${score}/100`, '', ''],
+        ['', '', ''],
+        ['Factor', 'Status', 'Details'],
+        
+        // Content rows
+        ['Title Tag', statusChecks.title?.status || 'not analyzed', statusChecks.title?.message || ''],
+        ['Meta Description', statusChecks.description?.status || 'not analyzed', statusChecks.description?.message || ''],
+        ['Canonical URL', statusChecks.canonical?.status || 'not analyzed', statusChecks.canonical?.message || ''],
+        ['Social Tags', statusChecks.social?.status || 'not analyzed', statusChecks.social?.message || ''],
+        ['Heading Structure', seoData.h1?.length === 1 ? 'good' : 'needs improvement', `H1: ${seoData.h1?.length || 0}, H2: ${seoData.h2?.length || 0}, H3: ${seoData.h3?.length || 0}`],
+        ['', '', ''],
+        ['Recommendations:', '', ''],
+      ];
+      
+      // Add recommendations if available
+      if (seoData.recommendations && seoData.recommendations.length > 0) {
+        seoData.recommendations.forEach((rec, index) => {
+          csvContent.push([`${index + 1}. ${rec.title}`, rec.type, rec.description]);
+        });
+      }
+      
+      // Convert arrays to CSV string
+      const csv = csvContent.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+      
+      // Create a blob and download link
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const downloadUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', downloadUrl);
+      link.setAttribute('download', `seo-report-${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error('Error generating report:', err);
+      alert('Failed to generate report. Please try again.');
+    }
   };
   
   // Get label based on score
@@ -83,8 +135,6 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
       return url;
     }
   };
-  
-  const scoreStatus = getScoreStatus(score);
 
   return (
     <section>
@@ -213,7 +263,12 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                   </Button>
                 )}
                 
-                <Button variant="outline" size="sm" className="flex items-center">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex items-center" 
+                  onClick={handleExportReport}
+                >
                   <DownloadIcon className="h-4 w-4 mr-2" />
                   Export Report
                 </Button>
@@ -225,31 +280,36 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
             </div>
             
             {/* Right content - Score Card */}
-            <div className={`lg:col-span-4 p-6 lg:p-8 flex items-center justify-center lg:border-l border-gray-200 ${
-              scoreStatus === 'good' ? 'bg-success-light/20' : 
-              scoreStatus === 'warning' ? 'bg-warning-light/20' : 
-              'bg-error-light/20'
+            <div className={`lg:col-span-4 p-6 lg:p-8 flex items-center justify-center lg:border-l border-gray-200 bg-gradient-to-br ${
+              scoreStatus === 'good' ? 'from-success-light/30 to-success-light/10' : 
+              scoreStatus === 'warning' ? 'from-warning-light/30 to-warning-light/10' : 
+              'from-error-light/30 to-error-light/10'
             }`}>
               <div className="text-center">
-                <div className="flex items-center justify-center mb-3">
-                  <div className="relative">
+                <div className="relative inline-block mb-6">
+                  <div className="absolute inset-0 bg-white rounded-full blur-md opacity-50"></div>
+                  <div className="relative z-10">
                     <CircularProgress 
                       value={score} 
-                      size={150} 
-                      strokeWidth={10}
+                      size={180} 
+                      strokeWidth={12}
                       showValue
-                      valueClassName="text-3xl font-bold"
+                      valueClassName="text-4xl font-bold"
                       status={scoreStatus}
                     />
-                    <div className="absolute -top-1 -right-1">
-                      <div className={`flex items-center justify-center h-10 w-10 rounded-full ${scoreStatus === 'good' ? 'bg-success' : scoreStatus === 'warning' ? 'bg-warning' : 'bg-error'}`}>
-                        <span className="text-white font-bold">{getScoreGrade(score)}</span>
+                    <div className="absolute -top-2 -right-2">
+                      <div className={`flex items-center justify-center h-12 w-12 rounded-full shadow-lg ${
+                        scoreStatus === 'good' ? 'bg-gradient-to-br from-success to-green-600' : 
+                        scoreStatus === 'warning' ? 'bg-gradient-to-br from-warning to-amber-600' : 
+                        'bg-gradient-to-br from-error to-red-600'
+                      }`}>
+                        <span className="text-white font-bold text-lg">{getScoreGrade(score)}</span>
                       </div>
                     </div>
                   </div>
                 </div>
                 
-                <h3 className={`text-xl font-bold ${
+                <h3 className={`text-2xl font-bold ${
                   scoreStatus === 'good' ? 'text-success' : 
                   scoreStatus === 'warning' ? 'text-warning' : 
                   'text-error'
@@ -257,7 +317,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                   {getScoreLabel(score)}
                 </h3>
                 
-                <p className="text-sm text-gray-600 mt-2 mb-4 max-w-[240px] mx-auto">
+                <p className="text-sm text-gray-600 mt-3 mb-4 max-w-[240px] mx-auto">
                   {scoreStatus === 'good' 
                     ? 'Your website follows most SEO best practices!' 
                     : scoreStatus === 'warning'
@@ -266,7 +326,11 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                   }
                 </p>
                 
-                <div className="flex items-center justify-center gap-2">
+                <div className={`flex items-center justify-center gap-2 py-2 px-4 rounded-full mx-auto w-fit ${
+                  scoreStatus === 'good' ? 'bg-success/10' : 
+                  scoreStatus === 'warning' ? 'bg-warning/10' : 
+                  'bg-error/10'
+                }`}>
                   <ShieldIcon className={`h-5 w-5 ${
                     scoreStatus === 'good' ? 'text-success' : 
                     scoreStatus === 'warning' ? 'text-warning' : 

@@ -96,8 +96,15 @@ export default function CompetitorAnalysis({ url, seoData }: CompetitorAnalysisP
                 
                 <div className="px-4 py-3">
                   <div className="flex items-center text-xs text-gray-500 mb-3">
-                    <ExternalLink className="w-3 h-3 mr-1" />
-                    <span className="truncate">{competitor.url}</span>
+                    <ExternalLink className="w-3 h-3 mr-1 flex-shrink-0" />
+                    <a 
+                      href={competitor.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-primary hover:underline overflow-hidden overflow-ellipsis"
+                    >
+                      {competitor.url}
+                    </a>
                   </div>
                   
                   <h4 className="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2 flex items-center">
