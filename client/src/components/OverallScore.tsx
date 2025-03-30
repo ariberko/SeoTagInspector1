@@ -16,6 +16,9 @@ import {
   HelpCircleIcon
 } from 'lucide-react';
 import { SEOTooltip } from './ui/seo-tooltip';
+import React from 'react'
+import { Search as SearchIcon } from 'lucide-react'
+
 
 interface OverallScoreProps {
   url: string;
@@ -28,17 +31,17 @@ interface OverallScoreProps {
 export default function OverallScore({ url, seoData, onRefresh }: OverallScoreProps) {
   const score = seoData.score || 0;
   const statusChecks = seoData.statusChecks || {};
-  
+
   // Determine score status for circular progress
   const getScoreStatus = (score: number): 'good' | 'warning' | 'error' => {
     if (score >= 80) return 'good';
     if (score >= 50) return 'warning';
     return 'error';
   };
-  
+
   // Get the score status once
   const scoreStatus = getScoreStatus(score);
-  
+
   // Handle exporting the SEO report
   const handleExportReport = () => {
     try {
@@ -52,7 +55,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
         [`Overall Score: ${score}/100`, '', ''],
         ['', '', ''],
         ['Factor', 'Status', 'Details'],
-        
+
         // Content rows
         ['Title Tag', statusChecks.title?.status || 'not analyzed', statusChecks.title?.message || ''],
         ['Meta Description', statusChecks.description?.status || 'not analyzed', statusChecks.description?.message || ''],
@@ -62,17 +65,17 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
         ['', '', ''],
         ['Recommendations:', '', ''],
       ];
-      
+
       // Add recommendations if available
       if (seoData.recommendations && seoData.recommendations.length > 0) {
         seoData.recommendations.forEach((rec, index) => {
           csvContent.push([`${index + 1}. ${rec.title}`, rec.type, rec.description]);
         });
       }
-      
+
       // Convert arrays to CSV string
       const csv = csvContent.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
-      
+
       // Create a blob and download link
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const downloadUrl = URL.createObjectURL(blob);
@@ -87,14 +90,14 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
       alert('Failed to generate report. Please try again.');
     }
   };
-  
+
   // Get label based on score
   const getScoreLabel = (score: number) => {
     if (score >= 80) return 'Good';
     if (score >= 50) return 'Needs Improvement';
     return 'Poor';
   };
-  
+
   // Get grade based on score
   const getScoreGrade = (score: number) => {
     if (score >= 90) return 'A';
@@ -103,7 +106,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
     if (score >= 60) return 'D';
     return 'F';
   };
-  
+
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'good':
@@ -116,7 +119,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
         return null;
     }
   };
-  
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'good':
@@ -140,7 +143,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
       return url;
     }
   };
-  
+
   // Generate related search terms based on the title and URL
   const generateRelatedSearches = (title: string, searchUrl: string): string[] => {
     // Extract the domain name to construct better suggestions
@@ -152,17 +155,17 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
     } catch {
       domain = 'site';
     }
-    
+
     // Extract keywords from title
     const keywords = title.toLowerCase()
       .replace(/[^\w\s]/g, '')
       .split(' ')
       .filter(word => word.length > 3) // Filter out short words
       .slice(0, 3); // Take up to 3 words
-    
+
     // Create alternatives and questions
     const searches = [];
-    
+
     // If we have keywords, generate search suggestions
     if (keywords.length) {
       const alternatives = [
@@ -170,23 +173,23 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
         `${keywords[0]} vs ${domain} comparison`,
         `${keywords.slice(0, 2).join(' ')} for ${Math.random() > 0.5 ? 'beginners' : 'professionals'}`
       ];
-      
+
       const questions = [
         `how to ${keywords[0]} without ${domain}`,
         `why ${keywords[0]} ${Math.random() > 0.5 ? 'matters' : 'is important'}`,
         `${keywords.slice(0, 2).join(' ')} tutorial`
       ];
-      
+
       // Mix alternatives and questions
       searches.push(
         alternatives[Math.floor(Math.random() * alternatives.length)],
         questions[Math.floor(Math.random() * questions.length)]
       );
     }
-    
+
     // Add a generic one based on domain
     searches.push(`${domain} ${Math.random() > 0.5 ? 'review' : 'tutorial'}`);
-    
+
     // Return unique searches
     return Array.from(new Set(searches)).slice(0, 3);
   };
@@ -204,7 +207,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                   Analysis Results
                 </div>
               </div>
-              
+
               <div className="flex items-center flex-wrap mb-2">
                 <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-blue-500 text-transparent bg-clip-text">
                   {displayUrl()}
@@ -221,12 +224,12 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                   </a>
                 </Button>
               </div>
-              
+
               <div className="text-gray-600 mb-6">
                 <p className="font-medium">{seoData.title || 'No title found'}</p>
                 <p className="text-sm text-gray-500 mt-1 line-clamp-2">{seoData.description || 'No description found'}</p>
               </div>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Title tag status */}
                 <div className={`rounded-lg shadow-sm p-4 border border-opacity-30 transition-all ${
@@ -251,7 +254,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Meta description status */}
                 <div className={`rounded-lg shadow-sm p-4 border border-opacity-30 transition-all ${
                   statusChecks.description?.status === 'good' ? 'bg-success-light/30 border-success hover:bg-success-light/50' : 
@@ -275,7 +278,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Canonical tag status */}
                 <div className={`rounded-lg shadow-sm p-4 border border-opacity-30 transition-all ${
                   statusChecks.canonical?.status === 'good' ? 'bg-success-light/30 border-success hover:bg-success-light/50' : 
@@ -299,7 +302,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Social tags status */}
                 <div className={`rounded-lg shadow-sm p-4 border border-opacity-30 transition-all ${
                   statusChecks.social?.status === 'good' ? 'bg-success-light/30 border-success hover:bg-success-light/50' : 
@@ -324,7 +327,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex flex-wrap items-center gap-3 mt-6">
                 {onRefresh && (
                   <Button 
@@ -337,7 +340,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                     Refresh Analysis
                   </Button>
                 )}
-                
+
                 <Button 
                   variant="outline" 
                   size="sm" 
@@ -347,13 +350,13 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                   <DownloadIcon className="h-4 w-4 mr-2" />
                   Export Report
                 </Button>
-                
+
                 <div className="text-xs text-gray-500 ml-auto">
                   Last analyzed: {new Date().toLocaleDateString()}
                 </div>
               </div>
             </div>
-            
+
             {/* Right content - Score Card */}
             <div className="lg:col-span-4 lg:border-l border-gray-200">
               <div className={`p-6 lg:p-8 ${
@@ -378,7 +381,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                     Grade: {getScoreGrade(score)}
                   </div>
                 </div>
-                
+
                 <div className="flex items-center mb-6">
                   <div className="mr-4">
                     <CircularProgress 
@@ -412,7 +415,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <h4 className="text-sm font-medium text-gray-700">Key Issues:</h4>
                   <ul className="text-sm text-gray-600 space-y-1 pl-5 list-disc">
@@ -438,7 +441,7 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                   </ul>
                 </div>
               </div>
-              
+
               {/* Copyright Section */}
               <div className="p-6 border-t border-gray-200">
                 <div className="flex justify-center">
