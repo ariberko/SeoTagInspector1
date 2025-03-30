@@ -16,10 +16,14 @@ export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Add https:// if not present
+    // Add http:// if not present 
     let formattedUrl = url.trim();
-    if (formattedUrl && !formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
-      formattedUrl = `https://${formattedUrl}`;
+    if (formattedUrl) {
+      // Check for protocol prefix
+      if (!formattedUrl.match(/^[a-zA-Z]+:\/\//)) {
+        // If no protocol is specified, add http://
+        formattedUrl = `http://${formattedUrl}`;
+      }
     }
     
     onSubmit(formattedUrl);
@@ -52,11 +56,11 @@ export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) 
                 <Globe className="h-5 w-5 text-muted-foreground" />
               </div>
               <Input 
-                type="url" 
+                type="text" 
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 className="pl-10 pr-3 py-6 border-2 bg-background text-foreground focus:border-primary transition-colors"
-                placeholder="https://example.com" 
+                placeholder="example.com or https://example.com" 
                 required
               />
             </div>
