@@ -11,7 +11,8 @@ import {
   GlobeIcon, 
   ExternalLinkIcon,
   BadgeCheckIcon,
-  ShieldIcon
+  ShieldIcon,
+  SearchIcon
 } from 'lucide-react';
 
 interface OverallScoreProps {
@@ -356,7 +357,11 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
                       size={100} 
                       strokeWidth={8}
                       showValue
-                      valueClassName="text-2xl font-bold"
+                      valueClassName={`text-2xl font-bold ${
+                        scoreStatus === 'good' ? 'text-success' : 
+                        scoreStatus === 'warning' ? 'text-warning' : 
+                        'text-error'
+                      }`}
                       status={scoreStatus}
                     />
                   </div>
@@ -408,18 +413,18 @@ export default function OverallScore({ url, seoData, onRefresh }: OverallScorePr
               {/* Related Searches Section */}
               <div className="p-6 border-t border-gray-200">
                 <h3 className="text-base font-semibold text-gray-700 mb-3">
-                  Related Searches You're Missing
+                  Potential Related Search Terms
                 </h3>
                 <p className="text-xs text-gray-500 mb-4">
-                  Users searching these terms may not find your website
+                  Search terms users might use related to your content
                 </p>
                 
                 <div className="space-y-3">
                   {seoData.title ? (
                     generateRelatedSearches(seoData.title, url).map((search: string, index: number) => (
                       <div key={index} className="flex items-center bg-gray-50 p-3 rounded-lg">
-                        <div className="flex-shrink-0 text-gray-400 mr-3">
-                          <AlertTriangleIcon className="h-4 w-4" />
+                        <div className="flex-shrink-0 text-primary mr-3">
+                          <GlobeIcon className="h-4 w-4" />
                         </div>
                         <div>
                           <p className="text-sm font-medium">{search}</p>
