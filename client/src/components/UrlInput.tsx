@@ -11,7 +11,7 @@ interface UrlInputProps {
 }
 
 export default function UrlInput({ onSubmit, isLoading, error }: UrlInputProps) {
-  const [url, setUrl] = useState<string>('https://');
+  const [url, setUrl] = useState<string>('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
