@@ -1,12 +1,15 @@
 import { SEOMetaTag } from '@shared/schema';
 import { truncateString } from '@/lib/seoUtils';
 import { AlertCircle, CheckCircle, Search, Info } from 'lucide-react';
+import { useTheme } from '@/context/ThemeContext';
 
 interface GooglePreviewProps {
   seoData: SEOMetaTag;
 }
 
 export default function GooglePreview({ seoData }: GooglePreviewProps) {
+  const { theme } = useTheme();
+
   // Get hostname from URL
   let hostname = '';
   try {
@@ -83,7 +86,7 @@ export default function GooglePreview({ seoData }: GooglePreviewProps) {
             <div className="flex-grow">
               <div className="flex items-center bg-white border rounded-full px-4 py-2 shadow-sm">
                 <Search className="h-4 w-4 text-gray-400 mr-2" />
-                <span className="text-gray-800 text-sm">{displayUrl()}</span>
+                <span className={`${theme === 'dark' ? 'text-gray-900' : 'text-gray-800'} text-sm`}>{displayUrl()}</span>
               </div>
             </div>
           </div>
@@ -91,13 +94,13 @@ export default function GooglePreview({ seoData }: GooglePreviewProps) {
         
         {/* Search result */}
         <div className="bg-white rounded-lg p-5 shadow-sm border border-gray-200">
-          <div className="text-sm text-gray-600 mb-1">
+          <div className={`text-sm ${theme === 'dark' ? 'text-gray-800' : 'text-gray-600'} mb-1`}>
             {displayUrl()}
           </div>
-          <a href="#" className="block text-xl text-[#1a0dab] hover:underline mb-1 font-medium">
+          <a href="#" className={`block text-xl ${theme === 'dark' ? 'text-blue-900' : 'text-[#1a0dab]'} hover:underline mb-1 font-medium`}>
             {title}
           </a>
-          <div className="text-sm text-[#4d5156] leading-normal">
+          <div className={`text-sm ${theme === 'dark' ? 'text-gray-800' : 'text-[#4d5156]'} leading-normal`}>
             {description}
           </div>
         </div>
@@ -115,11 +118,21 @@ export default function GooglePreview({ seoData }: GooglePreviewProps) {
                 {titleStatus.icon}
               </div>
               <div>
-                <span className={`font-semibold ${titleStatus.color}`}>{titleStatus.text}</span>
-                <p className="text-sm text-gray-600 mt-1">
+                <span className={`font-semibold ${
+                  theme === 'dark' 
+                    ? titleStatus.color === 'text-success' 
+                      ? 'text-green-800' 
+                      : titleStatus.color === 'text-warning' 
+                        ? 'text-amber-800' 
+                        : titleStatus.color === 'text-error' 
+                          ? 'text-red-800' 
+                          : titleStatus.color
+                    : titleStatus.color
+                }`}>{titleStatus.text}</span>
+                <p className={`text-sm ${theme === 'dark' ? 'text-gray-800' : 'text-gray-600'} mt-1`}>
                   Current length: {seoData.title?.length || 0}/60 characters
                   {seoData.title && seoData.title.length > 60 && (
-                    <span className="block mt-1 text-orange-600">Google may truncate your title in search results</span>
+                    <span className={`block mt-1 ${theme === 'dark' ? 'text-orange-800' : 'text-orange-600'}`}>Google may truncate your title in search results</span>
                   )}
                 </p>
               </div>
@@ -130,11 +143,21 @@ export default function GooglePreview({ seoData }: GooglePreviewProps) {
                 {descriptionStatus.icon}
               </div>
               <div>
-                <span className={`font-semibold ${descriptionStatus.color}`}>{descriptionStatus.text}</span>
-                <p className="text-sm text-gray-600 mt-1">
+                <span className={`font-semibold ${
+                  theme === 'dark' 
+                    ? descriptionStatus.color === 'text-success' 
+                      ? 'text-green-800' 
+                      : descriptionStatus.color === 'text-warning' 
+                        ? 'text-amber-800' 
+                        : descriptionStatus.color === 'text-error' 
+                          ? 'text-red-800' 
+                          : descriptionStatus.color
+                    : descriptionStatus.color
+                }`}>{descriptionStatus.text}</span>
+                <p className={`text-sm ${theme === 'dark' ? 'text-gray-800' : 'text-gray-600'} mt-1`}>
                   Current length: {seoData.description?.length || 0}/160 characters
                   {seoData.description && seoData.description.length > 160 && (
-                    <span className="block mt-1 text-orange-600">Google may truncate your description in search results</span>
+                    <span className={`block mt-1 ${theme === 'dark' ? 'text-orange-800' : 'text-orange-600'}`}>Google may truncate your description in search results</span>
                   )}
                 </p>
               </div>
@@ -149,10 +172,14 @@ export default function GooglePreview({ seoData }: GooglePreviewProps) {
                 )}
               </div>
               <div>
-                <span className={`font-semibold ${seoData.canonical ? 'text-success' : 'text-warning'}`}>
+                <span className={`font-semibold ${
+                  theme === 'dark'
+                    ? seoData.canonical ? 'text-green-800' : 'text-amber-800'
+                    : seoData.canonical ? 'text-success' : 'text-warning'
+                }`}>
                   {seoData.canonical ? 'Canonical URL is properly implemented' : 'Canonical URL is missing'}
                 </span>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className={`text-sm ${theme === 'dark' ? 'text-gray-800' : 'text-gray-600'} mt-1`}>
                   {seoData.canonical 
                     ? 'A canonical URL helps prevent duplicate content issues' 
                     : 'Without a canonical tag, search engines may index duplicate versions of your page'}

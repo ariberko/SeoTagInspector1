@@ -103,27 +103,27 @@ export default function SummaryStats({ seoData }: SummaryStatsProps) {
             {/* Issues count */}
             <div className="bg-success-light/50 border border-success/20 rounded-lg p-4 flex flex-col items-center justify-center">
               <CheckCircle className="h-8 w-8 text-success mb-2" />
-              <span className="text-2xl font-bold text-success">{issueCount.good}</span>
-              <span className="text-xs text-gray-600 text-center mt-1">Passed Checks</span>
+              <span className={`text-2xl font-bold text-success ${theme === 'dark' ? 'text-green-800' : ''}`}>{issueCount.good}</span>
+              <span className={`text-xs ${theme === 'dark' ? 'text-gray-800' : 'text-gray-600'} text-center mt-1`}>Passed Checks</span>
             </div>
             
             <div className="bg-warning-light/50 border border-warning/20 rounded-lg p-4 flex flex-col items-center justify-center">
               <AlertTriangle className="h-8 w-8 text-warning mb-2" />
-              <span className="text-2xl font-bold text-warning">{issueCount.warning}</span>
-              <span className="text-xs text-gray-600 text-center mt-1">Warnings</span>
+              <span className={`text-2xl font-bold text-warning ${theme === 'dark' ? 'text-amber-800' : ''}`}>{issueCount.warning}</span>
+              <span className={`text-xs ${theme === 'dark' ? 'text-gray-800' : 'text-gray-600'} text-center mt-1`}>Warnings</span>
             </div>
             
             <div className="bg-error-light/50 border border-error/20 rounded-lg p-4 flex flex-col items-center justify-center">
               <AlertCircle className="h-8 w-8 text-error mb-2" />
-              <span className="text-2xl font-bold text-error">{issueCount.error}</span>
-              <span className="text-xs text-gray-600 text-center mt-1">Critical Issues</span>
+              <span className={`text-2xl font-bold text-error ${theme === 'dark' ? 'text-red-800' : ''}`}>{issueCount.error}</span>
+              <span className={`text-xs ${theme === 'dark' ? 'text-gray-800' : 'text-gray-600'} text-center mt-1`}>Critical Issues</span>
             </div>
             
             {/* Time to fix */}
             <div className="bg-primary-light/20 border border-primary/20 rounded-lg p-4 flex flex-col items-center justify-center">
               <Clock className="h-8 w-8 text-primary mb-2" />
-              <span className="text-md font-bold text-primary">{timeToFix}</span>
-              <span className="text-xs text-gray-600 text-center mt-1">Estimated Fix Time</span>
+              <span className={`text-md font-bold text-primary ${theme === 'dark' ? 'text-blue-800' : ''}`}>{timeToFix}</span>
+              <span className={`text-xs ${theme === 'dark' ? 'text-gray-800' : 'text-gray-600'} text-center mt-1`}>Estimated Fix Time</span>
             </div>
           </div>
           
@@ -142,11 +142,14 @@ export default function SummaryStats({ seoData }: SummaryStatsProps) {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <div className={`w-2 h-6 rounded-sm mr-2 ${headingStructure.h1 === 1 ? 'bg-success' : headingStructure.h1 === 0 ? 'bg-error' : 'bg-warning'}`}></div>
-                      <span className="text-sm">H1 Tags</span>
+                      <span className={`text-sm ${theme === 'dark' ? 'text-gray-800' : ''}`}>H1 Tags</span>
                     </div>
                     <span className={`font-bold ${
-                      headingStructure.h1 === 1 ? 'text-success' : 
-                      headingStructure.h1 === 0 ? 'text-error' : 'text-warning'
+                      headingStructure.h1 === 1 
+                        ? theme === 'dark' ? 'text-green-800' : 'text-success' 
+                        : headingStructure.h1 === 0 
+                          ? theme === 'dark' ? 'text-red-800' : 'text-error' 
+                          : theme === 'dark' ? 'text-amber-800' : 'text-warning'
                     }`}>
                       {headingStructure.h1}
                     </span>
@@ -189,13 +192,13 @@ export default function SummaryStats({ seoData }: SummaryStatsProps) {
               
               <div className="relative">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">Social Tags Coverage</span>
+                  <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-800' : ''}`}>Social Tags Coverage</span>
                   <span className={`text-sm font-bold ${
                     socialTagsPresent / socialTagsTotal > 0.7 
-                      ? 'text-success' 
+                      ? theme === 'dark' ? 'text-green-800' : 'text-success' 
                       : socialTagsPresent / socialTagsTotal > 0.4 
-                        ? 'text-warning' 
-                        : 'text-error'
+                        ? theme === 'dark' ? 'text-amber-800' : 'text-warning' 
+                        : theme === 'dark' ? 'text-red-800' : 'text-error'
                   }`}>
                     {Math.round((socialTagsPresent / socialTagsTotal) * 100)}%
                   </span>
@@ -214,9 +217,9 @@ export default function SummaryStats({ seoData }: SummaryStatsProps) {
                   ></div>
                 </div>
                 
-                <div className="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>{socialTagsPresent} implemented</span>
-                  <span>{socialTagsTotal} recommended</span>
+                <div className="flex justify-between text-xs mt-1">
+                  <span className={theme === 'dark' ? 'text-gray-800' : 'text-gray-500'}>{socialTagsPresent} implemented</span>
+                  <span className={theme === 'dark' ? 'text-gray-800' : 'text-gray-500'}>{socialTagsTotal} recommended</span>
                 </div>
               </div>
               
@@ -227,7 +230,11 @@ export default function SummaryStats({ seoData }: SummaryStatsProps) {
                   </div>
                   <div>
                     <span className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-900' : ''}`}>Facebook</span>
-                    <div className={`text-xs ${seoData.ogTitle && seoData.ogDescription ? 'text-success' : 'text-error'}`}>
+                    <div className={`text-xs ${
+                      seoData.ogTitle && seoData.ogDescription 
+                        ? theme === 'dark' ? 'text-green-800' : 'text-success' 
+                        : theme === 'dark' ? 'text-red-800' : 'text-error'
+                    }`}>
                       {seoData.ogTitle && seoData.ogDescription ? 'Complete' : 'Incomplete'}
                     </div>
                   </div>
@@ -239,7 +246,11 @@ export default function SummaryStats({ seoData }: SummaryStatsProps) {
                   </div>
                   <div>
                     <span className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-900' : ''}`}>Twitter</span>
-                    <div className={`text-xs ${seoData.twitterCard && seoData.twitterTitle ? 'text-success' : 'text-error'}`}>
+                    <div className={`text-xs ${
+                      seoData.twitterCard && seoData.twitterTitle 
+                        ? theme === 'dark' ? 'text-green-800' : 'text-success' 
+                        : theme === 'dark' ? 'text-red-800' : 'text-error'
+                    }`}>
                       {seoData.twitterCard && seoData.twitterTitle ? 'Complete' : 'Incomplete'}
                     </div>
                   </div>
@@ -251,7 +262,11 @@ export default function SummaryStats({ seoData }: SummaryStatsProps) {
                   </div>
                   <div>
                     <span className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-900' : ''}`}>Instagram</span>
-                    <div className={`text-xs ${seoData.ogImage ? 'text-success' : 'text-error'}`}>
+                    <div className={`text-xs ${
+                      seoData.ogImage 
+                        ? theme === 'dark' ? 'text-green-800' : 'text-success' 
+                        : theme === 'dark' ? 'text-red-800' : 'text-error'
+                    }`}>
                       {seoData.ogImage ? 'Ready for sharing' : 'Missing image'}
                     </div>
                   </div>
@@ -265,10 +280,10 @@ export default function SummaryStats({ seoData }: SummaryStatsProps) {
                     <span className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-900' : ''}`}>Overall</span>
                     <div className={`text-xs ${
                       socialTagsPresent / socialTagsTotal > 0.7 
-                        ? 'text-success' 
+                        ? theme === 'dark' ? 'text-green-800' : 'text-success' 
                         : socialTagsPresent / socialTagsTotal > 0.4 
-                          ? 'text-warning' 
-                          : 'text-error'
+                          ? theme === 'dark' ? 'text-amber-800' : 'text-warning'
+                          : theme === 'dark' ? 'text-red-800' : 'text-error'
                     }`}>
                       {Math.round((socialTagsPresent / socialTagsTotal) * 100)}% optimized
                     </div>
